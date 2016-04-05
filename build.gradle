@@ -1,0 +1,59 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		classpath 'com.bmuschko:gradle-tomcat-plugin:2.2.4'
+	}
+}
+
+apply plugin: 'com.bmuschko.tomcat'
+apply plugin: 'war'
+
+defaultTasks 'tasks'
+
+group='net.maatvirtue'
+version = '0.0.1'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+def versions = [
+		spring : '4.2.5.RELEASE',
+		tomcat : '7.0.68'
+]
+
+dependencies {
+	compile 'org.slf4j:slf4j-api:1.7.18'
+	compile 'ch.qos.logback:logback-classic:1.1.6'
+
+	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+
+	tomcat "org.apache.tomcat.embed:tomcat-embed-core:${versions.tomcat}"
+	tomcat "org.apache.tomcat.embed:tomcat-embed-jasper:${versions.tomcat}"
+	tomcat "org.apache.tomcat:tomcat-jdbc:${versions.tomcat}"
+	tomcat 'mysql:mysql-connector-java:5.1.38'
+}
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.12'
+}
+
+tomcatRun {
+	httpPort = 8086
+	stopPort = 8087
+	stopKey = 'stop'
+}
+
+tomcatStop {
+	stopPort = 8087
+	stopKey = 'stop'
+}
+
+
