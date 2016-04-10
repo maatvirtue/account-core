@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%date %-5level [%-22thread] [%-20class{0}] - %-75message @%logger %n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="net.maatvirtue.accountcore">
+		<level value="debug" />
+	</logger>
+
+	<root>
+		<level value="info" />
+		<appender-ref ref="consoleLog" />
+	</root>
+</configuration>
