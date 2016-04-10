@@ -5,34 +5,20 @@ import org.apache.tomcat.jdbc.pool.DataSource;
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import javax.persistence.EntityManagerFactory;
-import java.util.Properties;
 
 @Configuration
-@PropertySource("classpath:config.properties")
-@ComponentScan(basePackages = Constants.BASE_PACKAGE)
 @EnableJpaRepositories(basePackages = Constants.JPA_REPOSITORY_PACKAGE)
 @EnableTransactionManagement
-public class SpringRootContextConfig
+public class DatabaseContextConfig
 {
-	@Bean
-	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer()
-	{
-		return new PropertySourcesPlaceholderConfigurer();
-	}
-
 	@Value("${db.driverClass}")
 	private String dbDriverClass;
 
@@ -51,39 +37,6 @@ public class SpringRootContextConfig
 	@Value("${db.showSql}")
 	private boolean dbShowSql;
 
-	@Value("${email.host}")
-	private String emailHost;
-
-	@Value("${email.port}")
-	private int emailPort;
-
-	@Value("${email.username}")
-	private String emailUsername;
-
-	@Value("${email.password}")
-	private String emailPassword;
-
-	@Bean
-	public LocalValidatorFactoryBean validator()
-	{
-		return new LocalValidatorFactoryBean();
-	}
-
-	@Bean
-	public Flyway flyway(javax.sql.DataSource datasource)
-	{
-		//Perform DB migration
-
-		Flyway flyway = new Flyway();
-		flyway.setDataSource(datasource);
-		flyway.setLocations("classpath:" + Constants.DB_MIGRATION_FOLDER);
-		flyway.setSqlMigrationPrefix(Constants.DB_MIGRATION_FILE_PREFIX);
-		flyway.setSqlMigrationSeparator(Constants.DB_MIGRATION_FILE_DESCRIPTION_SEPARATOR);
-		flyway.migrate();
-
-		return flyway;
-	}
-
 	@Bean
 	public DataSource datasource()
 	{
@@ -100,6 +53,21 @@ public class SpringRootContextConfig
 		datasource.setCommitOnReturn(false);
 
 		return datasource;
+	}
+
+	@Bean
+	public Flyway flyway(javax.sql.DataSource datasource)
+	{
+		//Perform DB migration
+
+		Flyway flyway = new Flyway();
+		flyway.setDataSource(datasource);
+		flyway.setLocations("classpath:" + Constants.DB_MIGRATION_FOLDER);
+		flyway.setSqlMigrationPrefix(Constants.DB_MIGRATION_FILE_PREFIX);
+		flyway.setSqlMigrationSeparator(Constants.DB_MIGRATION_FILE_DESCRIPTION_SEPARATOR);
+		flyway.migrate();
+
+		return flyway;
 	}
 
 	/**
@@ -133,25 +101,5 @@ public class SpringRootContextConfig
 		transactionManager.setEntityManagerFactory(entityManagerFactory);
 
 		return transactionManager;
-	}
-
-	@Bean
-	public JavaMailSenderImpl mailSender()
-	{
-		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		mailSender.setHost(emailHost);
-		mailSender.setPort(emailPort);
-		mailSender.setUsername(emailUsername);
-		mailSender.setPassword(emailPassword);
-
-		Properties javaMailProperties = new Properties();
-		javaMailProperties.put("mail.transport.protocol", "smtp");
-		javaMailProperties.put("mail.smtp.auth", true);
-		javaMailProperties.put("mail.smtp.starttls.enable", true);
-		javaMailProperties.put("mail.debug", false);
-
-		mailSender.setJavaMailProperties(javaMailProperties);
-
-		return mailSender;
 	}
 }
