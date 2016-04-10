@@ -16,9 +16,14 @@ public class WebAppInitializer implements WebApplicationInitializer
 	public void onStartup(ServletContext container)
 	{
 		setupSpringApplicationContext(container);
+		addCxfServlet(container);
 		registerFilters(container);
+	}
 
-		container.addServlet("CXF Servlet", new CXFServlet()).addMapping("/*");
+	private void addCxfServlet(ServletContext container) {
+		String servletUrlMapping = "/" + Constants.WEB_SERVICE_MAJOR_VERSION + "/*";
+
+		container.addServlet("CXF Servlet", new CXFServlet()).addMapping(servletUrlMapping);
 	}
 
 	private void setupSpringApplicationContext(ServletContext container)

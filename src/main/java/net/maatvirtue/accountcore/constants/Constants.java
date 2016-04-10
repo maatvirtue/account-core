@@ -6,7 +6,6 @@ public class Constants
 	public static final String ENTITY_PACKAGE = BASE_PACKAGE + ".entity";
 	public static final String JPA_REPOSITORY_PACKAGE = BASE_PACKAGE + ".jparepository";
 	public static final String SPRING_CONFIG_PACKAGE = BASE_PACKAGE + ".config.spring";
-	public static final String WEBSERVICE_PACKAGE = BASE_PACKAGE + ".webservice";
 
 	//Web service
 	public static final int WEB_SERVICE_MAJOR_VERSION = 1;
