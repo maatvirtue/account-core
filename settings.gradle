@@ -1,1 +1,1 @@
-include 'account-api', 'account-core'
+include 'user-api', 'user-core'
