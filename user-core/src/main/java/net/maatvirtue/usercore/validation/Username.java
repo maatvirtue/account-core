@@ -20,5 +20,6 @@ public @interface Username
 	String message() default "invalid username";
 
 	Class<?>[] groups() default {};
+
 	Class<? extends Payload>[] payload() default {};
 }

@@ -11,7 +11,6 @@ public class Constants
 	public static final int WEB_SERVICE_MAJOR_VERSION = 1;
 
 	//Database
-	public static final int TOKEN_LEN = 20;
 	public static final int SALT_LEN = 20;
 	public static final int DEFAULT_PASSWORD_LEN = 20;
 
