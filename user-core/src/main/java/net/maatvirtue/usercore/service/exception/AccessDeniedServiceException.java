@@ -5,6 +5,11 @@ import net.maatvirtue.wsutils.restexception.api.RestExceptionMapping;
 @RestExceptionMapping("access-denied")
 public class AccessDeniedServiceException extends SecurityServiceException
 {
+	public AccessDeniedServiceException()
+	{
+		//
+	}
+
 	public AccessDeniedServiceException(String message)
 	{
 		super(message);

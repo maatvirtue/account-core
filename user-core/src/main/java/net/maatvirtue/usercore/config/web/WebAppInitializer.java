@@ -3,6 +3,7 @@ package net.maatvirtue.usercore.config.web;
 import net.maatvirtue.usercore.constants.Constants;
 import net.maatvirtue.usercore.filter.CorsFilter;
 import net.maatvirtue.usercore.filter.RequestLogFilter;
+import net.maatvirtue.wsutils.restexception.impl.RestExceptionScanner;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
@@ -31,7 +32,14 @@ public class WebAppInitializer implements WebApplicationInitializer
 		AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
 		applicationContext.scan(Constants.SPRING_CONFIG_PACKAGE);
 
+		setupRestException();
+
 		container.addListener(new ContextLoaderListener(applicationContext));
+	}
+
+	private void setupRestException()
+	{
+		new RestExceptionScanner("net.maatvirtue").scan();
 	}
 
 	private void registerFilters(ServletContext container)
