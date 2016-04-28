@@ -1,8 +1,8 @@
 package net.maatvirtue.usercore.config.web;
 
 import net.maatvirtue.usercore.constants.Constants;
-import net.maatvirtue.usercore.filter.CorsFilter;
-import net.maatvirtue.usercore.filter.RequestLogFilter;
+import net.maatvirtue.wsutils.filter.CorsFilter;
+import net.maatvirtue.wsutils.filter.RequestLogFilter;
 import net.maatvirtue.wsutils.restexception.impl.RestExceptionScanner;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.springframework.web.WebApplicationInitializer;
