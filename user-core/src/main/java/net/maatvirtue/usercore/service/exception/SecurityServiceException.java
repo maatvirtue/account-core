@@ -1,6 +1,8 @@
 package net.maatvirtue.usercore.service.exception;
 
-public class SecurityServiceException extends ServiceException
+import net.maatvirtue.wsutils.restexception.api.RestException;
+
+public class SecurityServiceException extends RestException
 {
 	public SecurityServiceException()
 	{

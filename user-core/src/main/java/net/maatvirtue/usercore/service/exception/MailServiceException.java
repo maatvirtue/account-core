@@ -1,16 +1,16 @@
 package net.maatvirtue.usercore.service.exception;
 
-public class MailServiceException extends ServiceException
-{
-	private static final long serialVersionUID=-8959685427881051526L;
+import net.maatvirtue.wsutils.restexception.api.RestException;
 
+public class MailServiceException extends RestException
+{
 	public MailServiceException()
 	{
 		//Do nothing
 	}
 	
-	public MailServiceException(String message)
+	public MailServiceException(Throwable throwable)
 	{
-		super(message);
+		super(throwable);
 	}
 }

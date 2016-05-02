@@ -1,6 +1,8 @@
 package net.maatvirtue.usercore.service.exception;
 
-public class DuplicateServiceException extends ServiceException
+import net.maatvirtue.wsutils.restexception.api.RestException;
+
+public class DuplicateServiceException extends RestException
 {
 	public DuplicateServiceException()
 	{
