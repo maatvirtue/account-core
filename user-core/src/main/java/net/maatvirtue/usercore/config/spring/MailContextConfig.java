@@ -3,11 +3,13 @@ package net.maatvirtue.usercore.config.spring;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
 
 @Configuration
+@DependsOn("configCorePropertySource")
 public class MailContextConfig
 {
 	@Value("${email.host}")

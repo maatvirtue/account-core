@@ -10,6 +10,10 @@
 		<level value="debug" />
 	</logger>
 
+	<logger name="net.maatvirtue.wsutils">
+		<level value="debug" />
+	</logger>
+
 	<root>
 		<level value="info" />
 		<appender-ref ref="consoleLog" />
