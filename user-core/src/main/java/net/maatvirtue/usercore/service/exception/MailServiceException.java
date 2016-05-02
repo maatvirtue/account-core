@@ -13,9 +13,4 @@ public class MailServiceException extends ServiceException
 	{
 		super(message);
 	}
-	
-	public MailServiceException(Throwable throwable)
-	{
-		super(throwable);
-	}
 }

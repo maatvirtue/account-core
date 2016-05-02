@@ -13,9 +13,4 @@ public class PasswordMismatchServiceException extends SecurityServiceException
 	{
 		super(message);
 	}
-	
-	public PasswordMismatchServiceException(Throwable throwable)
-	{
-		super(throwable);
-	}
 }

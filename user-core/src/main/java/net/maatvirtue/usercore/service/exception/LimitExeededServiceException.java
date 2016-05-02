@@ -13,9 +13,4 @@ public class LimitExeededServiceException extends ServiceException
 	{
 		super(message);
 	}
-	
-	public LimitExeededServiceException(Throwable throwable)
-	{
-		super(throwable);
-	}
 }

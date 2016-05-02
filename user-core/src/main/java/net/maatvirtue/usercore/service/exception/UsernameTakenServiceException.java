@@ -13,9 +13,4 @@ public class UsernameTakenServiceException extends DuplicateServiceException
 	{
 		super(message);
 	}
-	
-	public UsernameTakenServiceException(Throwable throwable)
-	{
-		super(throwable);
-	}
 }

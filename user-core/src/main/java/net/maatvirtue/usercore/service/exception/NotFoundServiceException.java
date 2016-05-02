@@ -11,9 +11,4 @@ public class NotFoundServiceException extends ServiceException
 	{
 		super(message);
 	}
-	
-	public NotFoundServiceException(Throwable throwable)
-	{
-		super(throwable);
-	}
 }

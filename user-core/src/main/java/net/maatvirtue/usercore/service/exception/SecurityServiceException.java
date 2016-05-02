@@ -11,9 +11,4 @@ public class SecurityServiceException extends ServiceException
 	{
 		super(message);
 	}
-	
-	public SecurityServiceException(Throwable throwable)
-	{
-		super(throwable);
-	}
 }

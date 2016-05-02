@@ -11,9 +11,4 @@ public class DuplicateServiceException extends ServiceException
 	{
 		super(message);
 	}
-	
-	public DuplicateServiceException(Throwable throwable)
-	{
-		super(throwable);
-	}
 }

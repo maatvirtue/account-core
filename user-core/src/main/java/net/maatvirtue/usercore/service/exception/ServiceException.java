@@ -13,9 +13,4 @@ public abstract class ServiceException extends RestException
 	{
 		super(message);
 	}
-
-	public ServiceException(Throwable throwable)
-	{
-		super(throwable);
-	}
 }

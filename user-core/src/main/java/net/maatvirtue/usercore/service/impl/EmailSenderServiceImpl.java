@@ -120,7 +120,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
 		}
 		catch(MessagingException | UnsupportedEncodingException exception)
 		{
-			throw new MailServiceException(exception);
+			throw new MailServiceException(exception.getMessage());
 		}
 	}
 }
