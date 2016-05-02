@@ -1,6 +1,6 @@
 package net.maatvirtue.usercore.api.dto;
 
-public class Email
+public class EmailAddress
 {
 	@org.hibernate.validator.constraints.Email
 	private String email;

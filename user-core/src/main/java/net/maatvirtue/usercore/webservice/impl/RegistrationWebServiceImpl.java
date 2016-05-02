@@ -1,6 +1,6 @@
 package net.maatvirtue.usercore.webservice.impl;
 
-import net.maatvirtue.usercore.api.dto.Email;
+import net.maatvirtue.usercore.api.dto.EmailAddress;
 import net.maatvirtue.usercore.api.exception.UsernameTakenRestException;
 import net.maatvirtue.usercore.api.webservice.RegistrationWebService;
 import net.maatvirtue.usercore.service.RegistrationService;
@@ -18,8 +18,8 @@ public class RegistrationWebServiceImpl implements RegistrationWebService
 	private RegistrationService registrationService;
 
 	@Override
-	public void register(@Valid Email email) throws UsernameTakenRestException
+	public void register(@Valid EmailAddress emailAddress) throws UsernameTakenRestException
 	{
-		registrationService.registerWithPassword(email.getEmail());
+		registrationService.registerWithPassword(emailAddress.getEmail());
 	}
 }

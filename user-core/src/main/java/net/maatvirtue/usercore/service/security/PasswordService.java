@@ -1,7 +1,7 @@
 package net.maatvirtue.usercore.service.security;
 
+import net.maatvirtue.usercore.api.dto.PasswordCredential;
 import net.maatvirtue.usercore.domain.User;
-import net.maatvirtue.usercore.domain.security.PasswordCredential;
 
 public interface PasswordService
 {

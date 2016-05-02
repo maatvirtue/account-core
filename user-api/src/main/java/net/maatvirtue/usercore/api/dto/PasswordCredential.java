@@ -1,4 +1,4 @@
-package net.maatvirtue.usercore.domain.security;
+package net.maatvirtue.usercore.api.dto;
 
 import net.maatvirtue.usercore.api.validation.Password;
 import net.maatvirtue.usercore.api.validation.Username;

@@ -2,9 +2,9 @@ package net.maatvirtue.usercore.service.security.impl;
 
 import net.maatvirtue.commonlib.service.crypto.CryptoService;
 import net.maatvirtue.commonlib.util.GenericUtil;
+import net.maatvirtue.usercore.api.dto.PasswordCredential;
 import net.maatvirtue.usercore.constants.Constants;
 import net.maatvirtue.usercore.domain.User;
-import net.maatvirtue.usercore.domain.security.PasswordCredential;
 import net.maatvirtue.usercore.domain.security.StoredPasswordCredential;
 import net.maatvirtue.usercore.repository.StoredPasswordRepository;
 import net.maatvirtue.usercore.service.security.PasswordService;
