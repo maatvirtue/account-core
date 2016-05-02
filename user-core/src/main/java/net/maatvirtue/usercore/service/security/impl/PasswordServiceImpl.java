@@ -4,7 +4,6 @@ import net.maatvirtue.commonlib.service.crypto.CryptoService;
 import net.maatvirtue.commonlib.util.GenericUtil;
 import net.maatvirtue.usercore.constants.Constants;
 import net.maatvirtue.usercore.domain.User;
-import net.maatvirtue.usercore.domain.security.Credential;
 import net.maatvirtue.usercore.domain.security.PasswordCredential;
 import net.maatvirtue.usercore.domain.security.StoredPasswordCredential;
 import net.maatvirtue.usercore.repository.StoredPasswordRepository;
@@ -23,22 +22,16 @@ public class PasswordServiceImpl implements PasswordService
 
 	@Inject
 	private StoredPasswordRepository storedPasswordRepository;
-	
-	@Override
-	public User authenticate(Credential credential)
-	{
-		if(!(credential instanceof PasswordCredential))
-			throw new IllegalArgumentException(PasswordServiceImpl.class.getSimpleName()+
-				" only handles "+PasswordCredential.class.getSimpleName()+" authentication method.");
-		
-		PasswordCredential providedCredential=(PasswordCredential)credential;
 
+	@Override
+	public User authenticate(PasswordCredential providedCredential)
+	{
 		StoredPasswordCredential storedCredential = storedPasswordRepository.findByUsername(providedCredential.getUsername());
 		
 		/* If there is no user with that username or if the user with that username does not have a
 		 * password credential.
 		 */
-		if(storedCredential==null)
+		if(storedCredential == null)
 			return null;
 
 		String salt = storedCredential.getSalt();
@@ -55,7 +48,7 @@ public class PasswordServiceImpl implements PasswordService
 	{
 		byte[] providedPasswordHash = hashPassword(providedPassword, salt);
 
-		if(providedPasswordHash==null)
+		if(providedPasswordHash == null)
 			return false;
 
 		return Arrays.equals(providedPasswordHash, storedPasswordHash);
@@ -77,8 +70,8 @@ public class PasswordServiceImpl implements PasswordService
 	{
 		StoredPasswordCredential storedPassword = storedPasswordRepository.findByUsername(user.getUsername());
 
-		if(storedPassword==null)
-			throw new IllegalStateException("User with username \""+user.getUsername()+"\" does not have a password credential.");
+		if(storedPassword == null)
+			throw new IllegalStateException("User with username \"" + user.getUsername() + "\" does not have a password credential.");
 
 		String newPassword = generateRandomPassword();
 
@@ -91,8 +84,8 @@ public class PasswordServiceImpl implements PasswordService
 
 	private void createPasswordCredential(User user, PasswordCredential passwordCredential)
 	{
-		if(storedPasswordRepository.findByUsername(user.getUsername())!=null)
-			throw new IllegalStateException("User with username \""+user.getUsername()+"\" already has a password credential.");
+		if(storedPasswordRepository.findByUsername(user.getUsername()) != null)
+			throw new IllegalStateException("User with username \"" + user.getUsername() + "\" already has a password credential.");
 
 		StoredPasswordCredential storedPassword = new StoredPasswordCredential();
 		storedPassword.setUser(user);
@@ -119,9 +112,9 @@ public class PasswordServiceImpl implements PasswordService
 	{
 		return GenericUtil.generateRandomString(Constants.SALT_LEN);
 	}
-	
+
 	private byte[] hashPassword(String password, String salt)
 	{
-		return cryptoService.sha256(salt+password);
+		return cryptoService.sha256(salt + password);
 	}
 }

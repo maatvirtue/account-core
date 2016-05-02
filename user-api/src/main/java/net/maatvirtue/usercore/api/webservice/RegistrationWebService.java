@@ -1,6 +1,7 @@
 package net.maatvirtue.usercore.api.webservice;
 
 import net.maatvirtue.usercore.api.dto.Email;
+import net.maatvirtue.usercore.api.exception.UsernameTakenRestException;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -14,5 +15,5 @@ import javax.ws.rs.core.MediaType;
 public interface RegistrationWebService
 {
 	@POST
-	void register(Email email);
+	void register(Email email) throws UsernameTakenRestException;
 }

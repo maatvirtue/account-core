@@ -1,5 +1,6 @@
 package net.maatvirtue.usercore.service.impl;
 
+import net.maatvirtue.usercore.api.exception.UsernameTakenRestException;
 import net.maatvirtue.usercore.domain.ConfirmationEmail;
 import net.maatvirtue.usercore.domain.Email;
 import net.maatvirtue.usercore.domain.User;
@@ -8,7 +9,6 @@ import net.maatvirtue.usercore.repository.EmailRepository;
 import net.maatvirtue.usercore.service.ActivationService;
 import net.maatvirtue.usercore.service.ConfirmationEmailService;
 import net.maatvirtue.usercore.service.UserService;
-import net.maatvirtue.usercore.service.exception.UsernameTakenServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -79,7 +79,7 @@ public class ConfirmationEmailServiceImpl implements ConfirmationEmailService
 			{
 				activationService.activateUser(user);
 			}
-			catch(UsernameTakenServiceException exception)
+			catch(UsernameTakenRestException exception)
 			{
 				logger.warn("Failed activating userId "+user.getUserId()+", username already taken. Deleting user.");
 				userService.deleteUser(user.getUserId());

@@ -1,9 +1,9 @@
 package net.maatvirtue.usercore.service.impl;
 
+import net.maatvirtue.usercore.api.validation.Password;
+import net.maatvirtue.usercore.api.validation.Username;
 import net.maatvirtue.usercore.service.EmailSenderService;
 import net.maatvirtue.usercore.service.exception.MailServiceException;
-import net.maatvirtue.usercore.validation.Password;
-import net.maatvirtue.usercore.validation.Username;
 import org.hibernate.validator.constraints.Email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

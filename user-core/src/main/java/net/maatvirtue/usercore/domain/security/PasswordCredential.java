@@ -1,9 +1,9 @@
 package net.maatvirtue.usercore.domain.security;
 
-import net.maatvirtue.usercore.validation.Password;
-import net.maatvirtue.usercore.validation.Username;
+import net.maatvirtue.usercore.api.validation.Password;
+import net.maatvirtue.usercore.api.validation.Username;
 
-public class PasswordCredential implements PermanentCredential
+public class PasswordCredential
 {
 	@Username
 	private String username;

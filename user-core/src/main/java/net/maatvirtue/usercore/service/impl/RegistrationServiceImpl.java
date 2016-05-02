@@ -1,5 +1,6 @@
 package net.maatvirtue.usercore.service.impl;
 
+import net.maatvirtue.usercore.api.exception.UsernameTakenRestException;
 import net.maatvirtue.usercore.domain.User;
 import net.maatvirtue.usercore.domain.UserStatus;
 import net.maatvirtue.usercore.service.ConfirmationEmailService;
@@ -7,7 +8,6 @@ import net.maatvirtue.usercore.service.EmailSenderService;
 import net.maatvirtue.usercore.service.RegistrationService;
 import net.maatvirtue.usercore.service.UserService;
 import net.maatvirtue.usercore.service.exception.MailServiceException;
-import net.maatvirtue.usercore.service.exception.UsernameTakenServiceException;
 import net.maatvirtue.usercore.service.security.PasswordService;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.stereotype.Service;
@@ -31,10 +31,10 @@ public class RegistrationServiceImpl implements RegistrationService
 	@Inject
 	private ConfirmationEmailService confirmationEmailService;
 
-	public User registerWithPassword(@Email String email) throws MailServiceException, UsernameTakenServiceException
+	public User registerWithPassword(@Email String email) throws MailServiceException, UsernameTakenRestException
 	{
 		if(userService.usernameTaken(email))
-			throw new UsernameTakenServiceException("Username already used by another user: \""+email+"\"");
+			throw new UsernameTakenRestException("Username already used by another user: \""+email+"\"");
 
 		User user = userService.getUserByUsernameAndStatus(email, UserStatus.PENDING_ACTIVATION);
 		String password;

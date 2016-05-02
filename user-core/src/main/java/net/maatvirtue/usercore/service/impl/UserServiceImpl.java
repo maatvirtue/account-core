@@ -1,12 +1,12 @@
 package net.maatvirtue.usercore.service.impl;
 
+import net.maatvirtue.usercore.api.exception.UsernameTakenRestException;
 import net.maatvirtue.usercore.domain.Email;
 import net.maatvirtue.usercore.domain.User;
 import net.maatvirtue.usercore.domain.UserStatus;
 import net.maatvirtue.usercore.repository.EmailRepository;
 import net.maatvirtue.usercore.repository.UserRepository;
 import net.maatvirtue.usercore.service.UserService;
-import net.maatvirtue.usercore.service.exception.UsernameTakenServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,10 +38,10 @@ public class UserServiceImpl implements UserService
 		return userRepository.getUserByUsernameAndStatus(username, status);
 	}
 
-	public User createNewUser(@org.hibernate.validator.constraints.Email String emailText) throws UsernameTakenServiceException
+	public User createNewUser(@org.hibernate.validator.constraints.Email String emailText) throws UsernameTakenRestException
 	{
 		if(usernameTaken(emailText))
-			throw new UsernameTakenServiceException("Username already used by another user: \""+emailText+"\"");
+			throw new UsernameTakenRestException("Username already used by another user: \""+emailText+"\"");
 
 		User user = new User(UserStatus.PENDING_ACTIVATION, emailText);
 		user = userRepository.saveUser(user);
