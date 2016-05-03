@@ -48,7 +48,7 @@ public class ConfigCorePropertySource extends PropertySource<ConfigWebService>
 	{
 		try
 		{
-			return source.getConfigValue(name);
+			return source.getConfig(name).getValue();
 		}
 		catch(NotFoundRestException exception)
 		{
