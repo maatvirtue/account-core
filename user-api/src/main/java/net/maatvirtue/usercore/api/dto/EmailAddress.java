@@ -1,17 +1,29 @@
 package net.maatvirtue.usercore.api.dto;
 
+import org.hibernate.validator.constraints.Email;
+
 public class EmailAddress
 {
-	@org.hibernate.validator.constraints.Email
-	private String email;
+	@Email
+	private String emailAddress;
 
-	public String getEmail()
+	public EmailAddress()
 	{
-		return email;
+		//
 	}
 
-	public void setEmail(String email)
+	public EmailAddress(String emailAddress)
 	{
-		this.email = email;
+		this.emailAddress = emailAddress;
+	}
+
+	public String getEmailAddress()
+	{
+		return emailAddress;
+	}
+
+	public void setEmailAddress(String emailAddress)
+	{
+		this.emailAddress = emailAddress;
 	}
 }

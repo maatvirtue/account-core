@@ -20,6 +20,6 @@ public class RegistrationWebServiceImpl implements RegistrationWebService
 	@Override
 	public void register(@Valid EmailAddress emailAddress) throws UsernameTakenRestException
 	{
-		registrationService.registerWithPassword(emailAddress.getEmail());
+		registrationService.registerWithPassword(emailAddress.getEmailAddress());
 	}
 }
