@@ -1,19 +1,14 @@
-package net.maatvirtue.usercore.config.spring;
+package net.maatvirtue.usercore.config;
 
-import net.maatvirtue.usercore.constants.Constants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
-@PropertySource("classpath:config.properties")
-@ComponentScan(basePackages = Constants.BASE_PACKAGE)
-public class BaseContextConfig
+public class BaseConfig
 {
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer()

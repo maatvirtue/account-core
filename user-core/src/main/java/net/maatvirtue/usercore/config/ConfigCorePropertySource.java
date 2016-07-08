@@ -1,4 +1,4 @@
-package net.maatvirtue.usercore.config.spring;
+package net.maatvirtue.usercore.config;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import net.maatvirtue.configcore.api.webservice.ConfigWebService;
