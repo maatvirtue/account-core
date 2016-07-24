@@ -82,7 +82,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
 	@Inject
 	private JavaMailSender mailSender;
 
-	@Value("${email.username}")
+	@Value("${spring.mail.username}")
 	private String emailUsername;
 
 	@Value("${email.senderName}")
