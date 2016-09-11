@@ -82,10 +82,10 @@ public class EmailSenderServiceImpl implements EmailSenderService
 	@Inject
 	private JavaMailSender mailSender;
 
-	@Value("${spring.mail.username}")
-	private String emailUsername;
+	@Value("${email.sender.email}")
+	private String senderEmail;
 
-	@Value("${email.senderName}")
+	@Value("${email.sender.name}")
 	private String senderName;
 
 	public void sendRegistrationEmail(@Email String email, @Username String username, @Password String password) throws MailServiceException
@@ -108,12 +108,12 @@ public class EmailSenderServiceImpl implements EmailSenderService
 			MimeMessage message = mailSender.createMimeMessage();
 			MimeMessageHelper messageHelper = new MimeMessageHelper(message);
 
-			messageHelper.setFrom(new InternetAddress(emailUsername, senderName));
+			messageHelper.setFrom(new InternetAddress(senderEmail, senderName));
 			messageHelper.setTo(to);
 			messageHelper.setSubject(subject);
 			messageHelper.setText(body, true);
 
-			logger.debug("Queueing email to be sent: from: \"" + emailUsername + "\", to: \"" + to + "\", subject: \"" + subject + "\"");
+			logger.debug("Queueing email to be sent: from: \"" + senderEmail + "\", to: \"" + to + "\", subject: \"" + subject + "\"");
 
 			//send email on separate thread so we do not wait for it.
 			new SendEmailTh(message).start();
