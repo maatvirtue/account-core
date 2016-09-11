@@ -17,7 +17,7 @@ public class JwtServiceImpl implements JwtService
 {
 	private static final Integer JWT_TTL_MINUTES = 10;
 	private static final SignatureAlgorithm JWT_SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
-	private static final String ISSUER = "user.api.maatvirtue.net";
+	private static final String ISSUER = "user.api.nlacombe.net";
 
 	@Override
 	public JwsToken createJwtToken(String jwtSigningSecretKey, User user)
