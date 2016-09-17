@@ -1,3 +1,2 @@
-FROM leodutra/docker-alpine-oraclejre8
+FROM maatvirtue/spring-boot-base:1
 ADD *.jar app.jar
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom","-jar", "/app.jar"]
