@@ -7,6 +7,7 @@ import net.maatvirtue.usercore.constants.Constants;
 import net.maatvirtue.usercore.domain.User;
 import net.maatvirtue.usercore.domain.security.StoredPasswordCredential;
 import net.maatvirtue.usercore.repository.StoredPasswordRepository;
+import net.maatvirtue.usercore.service.ConfirmationEmailService;
 import net.maatvirtue.usercore.service.security.PasswordService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,32 +24,36 @@ public class PasswordServiceImpl implements PasswordService
 	@Inject
 	private StoredPasswordRepository storedPasswordRepository;
 
+	@Inject
+	private ConfirmationEmailService confirmationEmailService;
+
 	@Override
 	public User authenticate(PasswordCredential providedCredential)
 	{
 		StoredPasswordCredential storedCredential = storedPasswordRepository.findByUsername(providedCredential.getUsername());
-		
-		/* If there is no user with that username or if the user with that username does not have a
-		 * password credential.
-		 */
-		if(storedCredential == null)
+
+		if (storedCredential == null)
 			return null;
 
 		String salt = storedCredential.getSalt();
 		String providedPassword = providedCredential.getPassword();
 		byte[] storedPasswordHash = storedCredential.getPasswordHash();
 
-		if(!passwordMatches(salt, providedPassword, storedPasswordHash))
+		if (!passwordMatches(salt, providedPassword, storedPasswordHash))
 			return null;
 
-		return storedCredential.getUser();
+		User user = storedCredential.getUser();
+
+		confirmationEmailService.confirmEmail(user, providedPassword);
+
+		return user;
 	}
 
 	private boolean passwordMatches(String salt, String providedPassword, byte[] storedPasswordHash)
 	{
 		byte[] providedPasswordHash = hashPassword(providedPassword, salt);
 
-		if(providedPasswordHash == null)
+		if (providedPasswordHash == null)
 			return false;
 
 		return Arrays.equals(providedPasswordHash, storedPasswordHash);
@@ -70,7 +75,7 @@ public class PasswordServiceImpl implements PasswordService
 	{
 		StoredPasswordCredential storedPassword = storedPasswordRepository.findByUsername(user.getUsername());
 
-		if(storedPassword == null)
+		if (storedPassword == null)
 			throw new IllegalStateException("User with username \"" + user.getUsername() + "\" does not have a password credential.");
 
 		String newPassword = generateRandomPassword();
@@ -84,7 +89,7 @@ public class PasswordServiceImpl implements PasswordService
 
 	private void createPasswordCredential(User user, PasswordCredential passwordCredential)
 	{
-		if(storedPasswordRepository.findByUsername(user.getUsername()) != null)
+		if (storedPasswordRepository.findByUsername(user.getUsername()) != null)
 			throw new IllegalStateException("User with username \"" + user.getUsername() + "\" already has a password credential.");
 
 		StoredPasswordCredential storedPassword = new StoredPasswordCredential();

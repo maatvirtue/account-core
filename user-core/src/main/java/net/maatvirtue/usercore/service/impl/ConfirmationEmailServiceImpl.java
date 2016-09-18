@@ -39,23 +39,20 @@ public class ConfirmationEmailServiceImpl implements ConfirmationEmailService
 	{
 		Email email = findEmail(user, confirmationCode);
 
-		if(email!=null)
+		if (email != null)
 			confirmEmail(email);
 	}
 
 	private Email findEmail(User user, String confirmationCode)
 	{
 		List<ConfirmationEmail> confirmationEmails = confirmationEmailRepository.findByConfirmationCode(confirmationCode);
-		Email email;
 
-		for(ConfirmationEmail confirmationEmail: confirmationEmails)
+		for (ConfirmationEmail confirmationEmail : confirmationEmails)
 		{
-			email = confirmationEmail.getEmail();
+			Email email = confirmationEmail.getEmail();
 
-			if(email!=null && email.getUser().equals(user))
-			{
-				return  email;
-			}
+			if (email != null && email.getUser().equals(user))
+				return email;
 		}
 
 		return null;
@@ -63,7 +60,7 @@ public class ConfirmationEmailServiceImpl implements ConfirmationEmailService
 
 	public void confirmEmail(Email email)
 	{
-		if(email==null)
+		if (email == null)
 			throw new IllegalArgumentException("email cannot be null");
 
 		email.setConfirmed(true);
@@ -71,7 +68,7 @@ public class ConfirmationEmailServiceImpl implements ConfirmationEmailService
 
 		confirmationEmailRepository.deleteByEmail(email);
 
-		if(email.isPrimary())
+		if (email.isPrimary())
 		{
 			User user = email.getUser();
 
@@ -79,9 +76,9 @@ public class ConfirmationEmailServiceImpl implements ConfirmationEmailService
 			{
 				activationService.activateUser(user);
 			}
-			catch(UsernameTakenRestException exception)
+			catch (UsernameTakenRestException exception)
 			{
-				logger.warn("Failed activating userId "+user.getUserId()+", username already taken. Deleting user.");
+				logger.warn("Failed activating userId " + user.getUserId() + ", username already taken. Deleting user.");
 				userService.deleteUser(user.getUserId());
 			}
 		}
@@ -91,7 +88,7 @@ public class ConfirmationEmailServiceImpl implements ConfirmationEmailService
 	{
 		ConfirmationEmail confirmationEmail = confirmationEmailRepository.findByEmail(email);
 
-		if(confirmationEmail==null)
+		if (confirmationEmail == null)
 			confirmationEmail = new ConfirmationEmail(email);
 
 		confirmationEmail.setConfirmationCode(newConfirmationCode);
