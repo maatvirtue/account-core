@@ -1,2 +1,2 @@
-FROM maatvirtue/spring-boot-base:1
+FROM maatvirtue/spring-boot-base:2
 ADD *.jar app.jar
