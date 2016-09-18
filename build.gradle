@@ -13,10 +13,6 @@ subprojects {
 	repositories {
 		mavenCentral()
 		mavenLocal()
-
-		maven {
-			url 'http://repository.apache.org/snapshots/'
-		}
 	}
 }
 
