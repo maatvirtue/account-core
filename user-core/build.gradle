@@ -49,7 +49,6 @@ dependencies {
 
 task buildDocker(type: Docker, dependsOn: build) {
 	tag = "${project.name}"
-	push = true
 	dockerfile = file('src/main/docker/Dockerfile')
 	doFirst {
 		copy {
