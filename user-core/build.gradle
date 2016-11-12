@@ -48,7 +48,7 @@ dependencies {
 }
 
 task buildDocker(type: Docker, dependsOn: build) {
-	tag = "maatvirtue/${project.name}"
+	tag = "${project.name}"
 	push = true
 	dockerfile = file('src/main/docker/Dockerfile')
 	doFirst {
