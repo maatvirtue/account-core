@@ -1,1 +1,1 @@
-include 'user-api', 'user-core'
+include 'user-api', 'user-ws'
