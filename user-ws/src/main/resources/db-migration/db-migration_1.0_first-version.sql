@@ -1,76 +1,76 @@
-CREATE TABLE `userStatus` (
-  `userStatusId` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `user_status` (
+  `user_status_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
-  PRIMARY KEY (`userStatusId`),
+  PRIMARY KEY (`user_status_id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
 );
 
 CREATE TABLE `user` (
-  `userId` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(100) NOT NULL,
-  `firstName` varchar(100) DEFAULT NULL,
-  `lastName` varchar(100) DEFAULT NULL,
-  `avatarUrl` varchar(100) DEFAULT NULL,
-  `userStatusId` int(11) unsigned NOT NULL,
-  PRIMARY KEY (`userId`),
-  UNIQUE KEY `userId_UNIQUE` (`userId`),
-  KEY `fk_user_userStatus_idx` (`userStatusId`),
-  CONSTRAINT `fk_user_userStatus` FOREIGN KEY (`userStatusId`) REFERENCES `userStatus` (`userStatusId`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  `first_name` varchar(100) DEFAULT NULL,
+  `last_name` varchar(100) DEFAULT NULL,
+  `avatar_url` varchar(100) DEFAULT NULL,
+  `user_status_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `user_id_UNIQUE` (`user_id`),
+  KEY `fk_user_user_status_idx` (`user_status_id`),
+  CONSTRAINT `fk_user_user_status` FOREIGN KEY (`user_status_id`) REFERENCES `user_status` (`user_status_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 CREATE TABLE `email` (
-  `emailId` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `userId` int(11) unsigned NOT NULL,
+  `email_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) unsigned NOT NULL,
   `email` varchar(100) NOT NULL,
   `confirmed` bool not null,
   `primary` bool not null,
-  PRIMARY KEY (`emailId`),
-  UNIQUE KEY `emailId_UNIQUE` (`emailId`),
-  KEY `fk_email_user_idx` (`userId`),
-  CONSTRAINT `fk_email_user` FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON DELETE cascade ON UPDATE NO ACTION
+  PRIMARY KEY (`email_id`),
+  UNIQUE KEY `email_id_UNIQUE` (`email_id`),
+  KEY `fk_email_user_idx` (`user_id`),
+  CONSTRAINT `fk_email_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE cascade ON UPDATE NO ACTION
 );
 
-CREATE TABLE `confirmationEmail` (
-  `confirmationEmailId` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `emailId` int(11) unsigned NOT NULL,
-  `confirmationCode` char(20) NOT NULL,
-  PRIMARY KEY (`confirmationEmailId`),
-  UNIQUE KEY `confirmationEmailId_UNIQUE` (`confirmationEmailId`),
-  KEY `fk_confirmationEmail_email_idx` (`emailId`),
-  CONSTRAINT `fk_confirmationEmail_email` FOREIGN KEY (`emailId`) REFERENCES `email` (`emailId`) ON DELETE cascade ON UPDATE NO ACTION
+CREATE TABLE `confirmation_email` (
+  `confirmation_email_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `email_id` int(11) unsigned NOT NULL,
+  `confirmation_code` char(20) NOT NULL,
+  PRIMARY KEY (`confirmation_email_id`),
+  UNIQUE KEY `confirmation_email_id_UNIQUE` (`confirmation_email_id`),
+  KEY `fk_confirmation_email_email_idx` (`email_id`),
+  CONSTRAINT `fk_confirmation_email_email` FOREIGN KEY (`email_id`) REFERENCES `email` (`email_id`) ON DELETE cascade ON UPDATE NO ACTION
 );
 
-CREATE TABLE `passwordCredential` (
-  `passwordCredentialId` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `passwordHash` binary(32) NOT NULL,
+CREATE TABLE `password_credential` (
+  `password_credential_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `password_hash` binary(32) NOT NULL,
   `salt` char(20) NOT NULL,
-  `userId` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`passwordCredentialId`),
-  KEY `fk_passwordCredential_user_idx` (`userId`),
-  CONSTRAINT `fk_passwordCredential_user` FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON DELETE cascade ON UPDATE NO ACTION
+  `user_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`password_credential_id`),
+  KEY `fk_password_credential_user_idx` (`user_id`),
+  CONSTRAINT `fk_password_credential_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE cascade ON UPDATE NO ACTION
 );
 
 CREATE TABLE `permission` (
-  `permissionId` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `permission_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
-  PRIMARY KEY (`permissionId`),
+  PRIMARY KEY (`permission_id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
 );
 
 CREATE TABLE `role` (
-  `roleId` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `role_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
-  PRIMARY KEY (`roleId`),
+  PRIMARY KEY (`role_id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
 );
 
 CREATE TABLE `role_permission` (
-  `roleId` int(10) unsigned NOT NULL,
-  `permissionId` int(10) unsigned NOT NULL,
-  KEY `fk_rolePermission_role_idx` (`roleId`),
-  KEY `fk_rolePermission_permission_idx` (`permissionId`),
-  CONSTRAINT `fk_rolePermission_permission` FOREIGN KEY (`permissionId`) REFERENCES `permission` (`permissionId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_rolePermission_role` FOREIGN KEY (`roleId`) REFERENCES `role` (`roleId`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  `role_id` int(10) unsigned NOT NULL,
+  `permission_id` int(10) unsigned NOT NULL,
+  KEY `fk_rolePermission_role_idx` (`role_id`),
+  KEY `fk_rolePermission_permission_idx` (`permission_id`),
+  CONSTRAINT `fk_rolePermission_permission` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`permission_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rolePermission_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
-insert into `userStatus` (`name`) values ('pendingActivation'), ('active');
+insert into `user_status` (`name`) values ('pendingActivation'), ('active');
