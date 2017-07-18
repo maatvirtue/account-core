@@ -15,16 +15,16 @@ import java.util.Date;
 @Service
 public class JwtServiceImpl implements JwtService
 {
-	private static final Integer JWT_TTL_MINUTES = 10;
+	private static final Integer JWT_TTL_HOURS = 2;
 	private static final SignatureAlgorithm JWT_SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
-	private static final String ISSUER = "user.api.nlacombe.net";
+	private static final String ISSUER = "user-api.nlacombe.net";
 
 	@Override
 	public JwsToken createJwtToken(String jwtSigningSecretKey, User user)
 	{
 		JwtUser jwtUser = new JwtUser();
 		jwtUser.setIssuedAt(new Date());
-		jwtUser.setExpiration(Date.from(OffsetDateTime.now().plusMinutes(JWT_TTL_MINUTES).toInstant()));
+		jwtUser.setExpiration(Date.from(OffsetDateTime.now().plusHours(JWT_TTL_HOURS).toInstant()));
 		jwtUser.setIssuer(ISSUER);
 		jwtUser.setUserId(user.getUserId());
 		jwtUser.setSubject(Integer.toString(user.getUserId()));
