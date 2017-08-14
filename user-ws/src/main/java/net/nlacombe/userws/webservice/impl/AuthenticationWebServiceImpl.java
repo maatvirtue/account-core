@@ -1,12 +1,12 @@
 package net.nlacombe.userws.webservice.impl;
 
 import net.maatvirtue.authlib.jwt.JwsToken;
-import net.maatvirtue.wsutils.restexception.exception.NotFoundRestException;
 import net.nlacombe.userws.api.dto.PasswordCredential;
 import net.nlacombe.userws.api.webservice.AuthenticationWebService;
 import net.nlacombe.userws.domain.User;
 import net.nlacombe.userws.service.JwtService;
 import net.nlacombe.userws.service.security.PasswordService;
+import net.nlacombe.wsutils.restexception.exception.NotFoundRestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

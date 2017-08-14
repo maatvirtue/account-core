@@ -1,9 +1,9 @@
 package net.nlacombe.userws.config;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
-import net.maatvirtue.wsutils.filter.CorsFilter;
-import net.maatvirtue.wsutils.filter.RequestLogFilter;
-import net.maatvirtue.wsutils.restexception.providers.RestExceptionFeature;
+import net.nlacombe.wsutils.filter.CorsFilter;
+import net.nlacombe.wsutils.filter.RequestLogFilter;
+import net.nlacombe.wsutils.restexception.providers.RestExceptionFeature;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,7 +13,7 @@ public class CxfConfiguration
 	@Bean
 	public RestExceptionFeature restExceptionFeature()
 	{
-		return new RestExceptionFeature("net.maatvirtue");
+		return new RestExceptionFeature("net.nlacombe");
 	}
 
 	@Bean

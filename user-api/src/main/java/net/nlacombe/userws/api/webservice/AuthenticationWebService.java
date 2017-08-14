@@ -1,8 +1,8 @@
 package net.nlacombe.userws.api.webservice;
 
 import net.maatvirtue.authlib.jwt.JwsToken;
-import net.maatvirtue.wsutils.restexception.exception.NotFoundRestException;
 import net.nlacombe.userws.api.dto.PasswordCredential;
+import net.nlacombe.wsutils.restexception.exception.NotFoundRestException;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
