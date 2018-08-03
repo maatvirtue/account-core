@@ -25,8 +25,9 @@ dependencies {
 	compile project(':user-api')
 
 	compile 'net.nlacombe:common-lib:7.0.0'
-	compile 'net.nlacombe:crypto-lib:5.0.0'
-	compile 'net.nlacombe:ws-utils:4.1.0'
+	compile 'net.nlacombe:crypto-lib:6.0.0'
+	compile "net.nlacombe:ws-utils:5.0.0"
+	compile "net.nlacombe:auth-lib:7.0.0"
 
 	compile "org.springframework.cloud:spring-cloud-starter-config"
 	compile 'org.springframework.cloud:spring-cloud-starter-consul-discovery'

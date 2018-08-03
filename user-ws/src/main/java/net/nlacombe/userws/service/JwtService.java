@@ -1,7 +1,7 @@
 package net.nlacombe.userws.service;
 
-import net.maatvirtue.authlib.jwt.JwsToken;
-import net.maatvirtue.authlib.jwt.JwtUser;
+import net.nlacombe.authlib.jwt.JwsToken;
+import net.nlacombe.authlib.jwt.JwtUser;
 import net.nlacombe.userws.domain.User;
 
 public interface JwtService

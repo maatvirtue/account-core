@@ -2,9 +2,9 @@ package net.nlacombe.userws.service.impl;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import net.maatvirtue.authlib.jwt.JwsToken;
-import net.maatvirtue.authlib.jwt.JwtClaim;
-import net.maatvirtue.authlib.jwt.JwtUser;
+import net.nlacombe.authlib.jwt.JwsToken;
+import net.nlacombe.authlib.jwt.JwtClaim;
+import net.nlacombe.authlib.jwt.JwtUser;
 import net.nlacombe.userws.domain.User;
 import net.nlacombe.userws.service.JwtService;
 import org.springframework.stereotype.Service;

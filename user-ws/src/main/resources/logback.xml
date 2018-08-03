@@ -7,15 +7,15 @@
 	</appender>
 
 	<logger name="net.nlacombe.userws">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
 
 	<logger name="net.nlacombe.wsutils">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
 
 	<root>
-		<level value="info" />
+		<level value="warn" />
 		<appender-ref ref="consoleLog" />
 	</root>
 </configuration>
