@@ -25,7 +25,7 @@ public class UserRepository
 
 	public User getUserById(int userId)
 	{
-		UserEntity userTable = userJpaRepository.findOne(userId);
+		UserEntity userTable = userJpaRepository.getOne(userId);
 		User user = userEntityMapper.mapToDomainType(userTable);
 
 		return user;
@@ -40,7 +40,7 @@ public class UserRepository
 
 	public void deleteUser(int userId)
 	{
-		userJpaRepository.delete(userId);
+		userJpaRepository.deleteById(userId);
 	}
 
 	public boolean userWithUsernameAndStatusExist(String username, UserStatus status)

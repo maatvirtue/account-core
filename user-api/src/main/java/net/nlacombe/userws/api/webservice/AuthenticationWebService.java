@@ -1,6 +1,7 @@
 package net.nlacombe.userws.api.webservice;
 
-import net.maatvirtue.authlib.jwt.JwsToken;
+import net.nlacombe.authlib.jwt.JwsToken;
+import net.nlacombe.authlib.jwt.TextJwt;
 import net.nlacombe.userws.api.dto.PasswordCredential;
 import net.nlacombe.wsutils.restexception.exception.NotFoundRestException;
 
@@ -18,4 +19,8 @@ public interface AuthenticationWebService
 	@POST
 	@Path("usernameAndPassword")
 	JwsToken authenticate(PasswordCredential passwordCredential) throws NotFoundRestException;
+
+	@POST
+	@Path("jwt")
+	JwsToken authenticateWithExternalJwt(TextJwt textJwt);
 }
