@@ -53,7 +53,7 @@ public class AuthenticationWebServiceImpl implements AuthenticationWebService
 	@Override
 	public JwsToken authenticateWithExternalJwt(TextJwt textJwt)
 	{
-		JwtData jwtData = JwtUtil.parseAndValidate(textJwt);
+		JwtData jwtData = JwtUtil.getInstance().parseAndValidate(textJwt);
 		User user;
 
 		if (jwtData instanceof JwtGoogleUser)
