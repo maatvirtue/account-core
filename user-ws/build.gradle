@@ -61,7 +61,31 @@ task buildDocker(type: Docker, dependsOn: build) {
 	doFirst {
 		copy {
 			from jar
+			from file('src/main/docker/')
 			into stageDir
 		}
 	}
+}
+
+task appengineDeploy(type: Exec, dependsOn: build) {
+	def appengineBuildDir = file('build/appengine/')
+	def version = project.version.replaceAll('\\.', '-') + '-' + getDateTimestamp()
+
+	workingDir appengineBuildDir
+	commandLine 'gcloud', 'app', 'deploy', '-q', '-v', version
+
+	doFirst {
+		copy {
+			from jar
+			from file('src/main/appengine/app.yaml')
+			from file('src/main/docker/')
+			into appengineBuildDir
+		}
+	}
+}
+
+def static getDateTimestamp() {
+	def date = new Date()
+	def formattedDate = date.format('yyyyMMddHHmmss')
+	return formattedDate
 }
