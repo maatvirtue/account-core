@@ -1,10 +1,9 @@
 package net.nlacombe.userws.webservice.impl;
 
-import net.nlacombe.authlib.jwt.JwsToken;
 import net.nlacombe.authlib.jwt.JwtData;
 import net.nlacombe.authlib.jwt.JwtGoogleUser;
 import net.nlacombe.authlib.jwt.JwtUtil;
-import net.nlacombe.authlib.jwt.TextJwt;
+import net.nlacombe.userws.api.dto.JwsToken;
 import net.nlacombe.userws.api.dto.PasswordCredential;
 import net.nlacombe.userws.api.webservice.AuthenticationWebService;
 import net.nlacombe.userws.domain.User;
@@ -14,7 +13,6 @@ import net.nlacombe.userws.service.UserService;
 import net.nlacombe.userws.service.security.PasswordService;
 import net.nlacombe.wsutils.restexception.exception.InvalidInputRestException;
 import net.nlacombe.wsutils.restexception.exception.NotFoundRestException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,18 +26,16 @@ public class AuthenticationWebServiceImpl implements AuthenticationWebService
 	private JwtService jwtService;
 	private ExternalJwtCredentialService externalJwtCredentialService;
 	private UserService userService;
-
-	@Value("${security.jwtSigningSecretKey}")
-	private String jwtSigningSecretKey;
+	private JwtUtil jwtUtil;
 
 	@Inject
-	public AuthenticationWebServiceImpl(PasswordService passwordService, JwtService jwtService, ExternalJwtCredentialService externalJwtCredentialService,
-										UserService userService)
+	public AuthenticationWebServiceImpl(PasswordService passwordService, JwtService jwtService, ExternalJwtCredentialService externalJwtCredentialService, UserService userService, JwtUtil jwtUtil)
 	{
 		this.passwordService = passwordService;
 		this.jwtService = jwtService;
 		this.externalJwtCredentialService = externalJwtCredentialService;
 		this.userService = userService;
+		this.jwtUtil = jwtUtil;
 	}
 
 	@Override
@@ -51,9 +47,9 @@ public class AuthenticationWebServiceImpl implements AuthenticationWebService
 	}
 
 	@Override
-	public JwsToken authenticateWithExternalJwt(TextJwt textJwt)
+	public JwsToken authenticateWithExternalJwt(JwsToken externalJwsToken)
 	{
-		JwtData jwtData = JwtUtil.getInstance().parseAndValidate(textJwt);
+		JwtData jwtData = jwtUtil.parseAndValidate(externalJwsToken.getToken());
 		User user;
 
 		if (jwtData instanceof JwtGoogleUser)
@@ -86,6 +82,6 @@ public class AuthenticationWebServiceImpl implements AuthenticationWebService
 		if (user == null)
 			throw new NotFoundRestException();
 
-		return jwtService.createJwtToken(jwtSigningSecretKey, user);
+		return new JwsToken(jwtService.createJwtToken(user));
 	}
 }
