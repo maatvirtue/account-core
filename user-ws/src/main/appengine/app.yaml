@@ -1,3 +1,7 @@
 runtime: custom
 env: flex
 service: user-ws
+automatic_scaling:
+  min_num_instances: 1
+  cpu_utilization:
+    target_utilization: 0.7
