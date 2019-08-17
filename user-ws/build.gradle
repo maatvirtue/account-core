@@ -4,8 +4,8 @@ buildscript {
 	}
 
 	dependencies {
-		classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE"
-		classpath "io.spring.gradle:dependency-management-plugin:1.0.5.RELEASE"
+		classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.1.7.RELEASE'
+		classpath 'io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE'
 		classpath 'se.transmode.gradle:gradle-docker:1.2'
 	}
 }
@@ -20,20 +20,25 @@ dependencyManagement {
 	}
 }
 
+project.ext.gcloudBuildDir = file('build/gcloud-build/')
+project.ext.gcloudProjectId = 'nlacombe-net-prod'
+
+String gcloudDockerImageUrl
+
 dependencies {
 	compile project(':user-api')
 
-	compile 'net.nlacombe:common-lib:7.0.0'
+	compile 'net.nlacombe:common-lib:9.0.0'
 	compile 'net.nlacombe:crypto-lib:6.1.0'
 	compile 'net.nlacombe:ws-utils:5.0.0'
 	compile 'net.nlacombe:auth-lib:10.0.0'
 
-	compile "org.springframework.cloud:spring-cloud-starter-config"
-	compile "org.springframework.boot:spring-boot-starter-web"
+	compile 'org.springframework.cloud:spring-cloud-starter-config'
+	compile 'org.springframework.boot:spring-boot-starter-web'
 	compile 'org.springframework.boot:spring-boot-starter-actuator'
-	compile "org.springframework.boot:spring-boot-starter-data-jpa"
-	compile "org.springframework.boot:spring-boot-starter-mail"
-	compile 'org.apache.cxf:cxf-spring-boot-starter-jaxrs:3.2.5'
+	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+	compile 'org.springframework.boot:spring-boot-starter-mail'
+	compile 'org.apache.cxf:cxf-spring-boot-starter-jaxrs:3.3.2'
 
 	compile 'org.flywaydb:flyway-core:4.1.2'
 
@@ -43,9 +48,10 @@ dependencies {
 
 	compile 'org.slf4j:slf4j-api:1.7.25'
 
-	runtime 'mysql:mysql-connector-java:6.0.6'
+	runtime 'mysql:mysql-connector-java:8.0.17'
 	runtime 'ch.qos.logback:logback-classic:1.2.3'
 	runtime 'javax.xml.bind:jaxb-api:2.3.0'
+	runtime 'org.javassist:javassist:3.25.0-GA'
 
 	testCompile 'junit:junit:4.12'
 	testCompile 'org.springframework.boot:spring-boot-starter-test:2.0.3.RELEASE'
@@ -53,7 +59,7 @@ dependencies {
 	testCompile 'org.mockito:mockito-core:2.19.0'
 }
 
-task buildDocker(type: Docker, dependsOn: build) {
+task buildDocker(type: Docker, dependsOn: assemble) {
 	tag = "${project.name}"
 	dockerfile = file('src/main/docker/Dockerfile')
 	doFirst {
@@ -65,25 +71,36 @@ task buildDocker(type: Docker, dependsOn: build) {
 	}
 }
 
-task appengineDeploy(type: Exec, dependsOn: build) {
-	def appengineBuildDir = file('build/appengine/')
-	def version = project.version.replaceAll('\\.', '-') + '-' + getDateTimestamp()
+task buildGcloudDockerImage(type: Exec, dependsOn: assemble) {
+	def buildStartTime = new Date()
+	gcloudDockerImageUrl = getGcloudDockerImageUrl(buildStartTime)
 
-	workingDir appengineBuildDir
-	commandLine 'gcloud', 'app', 'deploy', '-q', '-v', version
+	workingDir project.gcloudBuildDir
+	commandLine 'gcloud', 'builds', 'submit', '--tag', gcloudDockerImageUrl
 
 	doFirst {
 		copy {
 			from jar
-			from file('src/main/appengine/app.yaml')
 			from file('src/main/docker/')
-			into appengineBuildDir
+			into project.gcloudBuildDir
 		}
 	}
 }
 
-def static getDateTimestamp() {
-	def date = new Date()
-	def formattedDate = date.format('yyyyMMddHHmmss')
-	return formattedDate
+task deployToProdGcloud(type: Exec, dependsOn: buildGcloudDockerImage) {
+	workingDir project.gcloudBuildDir
+	commandLine 'gcloud', 'beta', 'run', 'deploy', "${project.name}",
+			'--region', 'us-central1',
+			'--memory', '500M',
+			'--image', gcloudDockerImageUrl
+}
+
+def getGcloudDockerImageUrl(date) {
+	def version = project.version + '-' + getDateTimestamp(date)
+
+	return "gcr.io/${project.gcloudProjectId}/${project.name}:${version}"
+}
+
+def static getDateTimestamp(date) {
+	return date.format('yyyyMMddHHmmss')
 }
