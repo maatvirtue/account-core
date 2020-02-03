@@ -4,4 +4,5 @@ RUN chmod u+x /startApp.sh
 ENTRYPOINT ["/startApp.sh"]
 ENV PORT 8005
 
-ADD *.jar app.jar
+ADD *.jar /app.jar
+ADD gcp-service-account-credentials-nlacombe-net-prod.json /gcp-service-account-credentials-nlacombe-net-prod.json

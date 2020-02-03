@@ -1,6 +1,13 @@
-dependencies {
-	compile 'javax.ws.rs:javax.ws.rs-api:2.0.1'
-	compile 'net.nlacombe:ws-utils:5.0.0'
+apply plugin: 'java-library'
 
-	compile 'org.hibernate:hibernate-validator:5.2.4.Final'
+java {
+	sourceCompatibility = project.javaVersion
+	targetCompatibility = project.javaVersion
+}
+
+dependencies {
+	api 'javax.ws.rs:javax.ws.rs-api:2.0.1'
+	api 'net.nlacombe:ws-utils:5.0.0'
+
+	api 'org.hibernate:hibernate-validator:5.2.4.Final'
 }

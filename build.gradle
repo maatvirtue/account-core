@@ -1,14 +1,12 @@
 subprojects {
-	apply plugin: 'java'
 	apply plugin: 'maven'
 
 	defaultTasks 'tasks'
 
 	group = 'net.nlacombe'
-	version = '4.0.0'
+	version = '4.0.1'
 
-	sourceCompatibility = 10
-	targetCompatibility = 10
+	project.ext.javaVersion = JavaVersion.VERSION_11
 
 	repositories {
 		mavenCentral()
@@ -17,5 +15,5 @@ subprojects {
 }
 
 wrapper {
-	gradleVersion = '4.9'
+	gradleVersion = '6.0.1'
 }
