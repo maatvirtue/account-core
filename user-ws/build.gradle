@@ -99,7 +99,7 @@ task buildGcloudDockerImage(type: Exec, dependsOn: assemble) {
 task deployToProdGcloud(type: Exec, dependsOn: buildGcloudDockerImage) {
 	workingDir project.gcloudBuildDir
 	commandLine 'gcloud', 'beta', 'run', 'deploy', "${project.name}",
-			'--region', 'us-east1',
+			'--region', 'us-east4',
 			'--platform', 'managed',
 			'--memory', '500M',
 			'--image', gcloudDockerImageUrl
