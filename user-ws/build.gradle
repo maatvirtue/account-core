@@ -41,7 +41,7 @@ dependencies {
 	implementation 'net.nlacombe:common-lib:9.0.0'
 	implementation 'net.nlacombe:crypto-lib:6.1.0'
 	implementation 'net.nlacombe:ws-utils:5.0.0'
-	implementation 'net.nlacombe:auth-lib:10.0.0'
+	implementation 'net.nlacombe:auth-lib:10.1.0'
 
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 	implementation 'org.springframework.cloud:spring-cloud-gcp-starter'
