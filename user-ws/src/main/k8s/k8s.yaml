@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-ws
+  labels:
+    app: user-ws
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-ws
+  template:
+    metadata:
+      labels:
+        app: user-ws
+    spec:
+      containers:
+        - name: user-ws
+          image: gcr.io/nlacombe-net-prod/user-ws:4.1.0-20200728212718
+          env:
+            - name: PORT
+              value: "80"
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-ws
+spec:
+  selector:
+    app: user-ws
+  ports:
+    - port: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: user-ws
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/frontend-entry-points: https
+spec:
+  rules:
+    - host: user-api.nlacombe.net
+      http:
+        paths:
+          - backend:
+              serviceName: user-ws
+              servicePort: 80
