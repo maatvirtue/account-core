@@ -4,7 +4,7 @@ subprojects {
 	defaultTasks 'tasks'
 
 	group = 'net.nlacombe'
-	version = '4.1.0'
+	version = '4.1.1'
 
 	project.ext.javaVersion = JavaVersion.VERSION_11
 

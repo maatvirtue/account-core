@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: user-ws
-          image: gcr.io/nlacombe-net-prod/user-ws:4.1.0-20200728212718
+          image: gcr.io/nlacombe-net-prod/user-ws:4.1.1-20201213192128
           env:
             - name: PORT
               value: "80"
@@ -24,11 +24,11 @@ spec:
             - containerPort: 80
           resources:
             requests:
-              cpu: 50m
-              memory: 300Mi
+              cpu: 10m
+              memory: 200Mi
             limits:
-              cpu: 200m
-              memory: 500Mi
+              cpu: 600m
+              memory: 284Mi
 ---
 apiVersion: v1
 kind: Service
