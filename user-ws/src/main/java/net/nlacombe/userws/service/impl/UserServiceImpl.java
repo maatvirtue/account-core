@@ -10,19 +10,19 @@ import net.nlacombe.userws.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-
 @Service
 @Transactional
 public class UserServiceImpl implements UserService
 {
-	@Inject
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
+	private final EmailRepository emailRepository;
 
-	@Inject
-	private EmailRepository emailRepository;
+    public UserServiceImpl(UserRepository userRepository, EmailRepository emailRepository) {
+        this.userRepository = userRepository;
+        this.emailRepository = emailRepository;
+    }
 
-	public boolean usernameTaken(String username)
+    public boolean usernameTaken(String username)
 	{
 		return userRepository.userWithUsernameAndStatusExist(username, UserStatus.ACTIVE);
 	}

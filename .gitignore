@@ -10,9 +10,3 @@ gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
-
-### Secret files NEVER to commit ###
-secret.properties
-bootstrap.properties
-nlacombe-net_v2.pem
-gcp-service-account-credentials-nlacombe-net-prod.json

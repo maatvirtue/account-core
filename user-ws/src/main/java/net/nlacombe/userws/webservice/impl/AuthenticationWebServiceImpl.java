@@ -16,19 +16,16 @@ import net.nlacombe.wsutils.restexception.exception.NotFoundRestException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-
 @Service
 @Transactional
 public class AuthenticationWebServiceImpl implements AuthenticationWebService
 {
-	private PasswordService passwordService;
-	private JwtService jwtService;
-	private ExternalJwtCredentialService externalJwtCredentialService;
-	private UserService userService;
-	private JwtUtil jwtUtil;
+	private final PasswordService passwordService;
+	private final JwtService jwtService;
+	private final ExternalJwtCredentialService externalJwtCredentialService;
+	private final UserService userService;
+	private final JwtUtil jwtUtil;
 
-	@Inject
 	public AuthenticationWebServiceImpl(PasswordService passwordService, JwtService jwtService, ExternalJwtCredentialService externalJwtCredentialService, UserService userService, JwtUtil jwtUtil)
 	{
 		this.passwordService = passwordService;

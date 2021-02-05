@@ -7,15 +7,12 @@ import net.nlacombe.userws.mapper.UserEntityMapper;
 import net.nlacombe.userws.service.ExternalJwtCredentialService;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-
 @Service
 public class DefaultExternalJwtCredentialService implements ExternalJwtCredentialService
 {
-	private ExternalJwtCredentialJpaRepository externalJwtCredentialJpaRepository;
-	private UserEntityMapper userEntityMapper;
+	private final ExternalJwtCredentialJpaRepository externalJwtCredentialJpaRepository;
+	private final UserEntityMapper userEntityMapper;
 
-	@Inject
 	public DefaultExternalJwtCredentialService(ExternalJwtCredentialJpaRepository externalJwtCredentialJpaRepository, UserEntityMapper userEntityMapper)
 	{
 		this.externalJwtCredentialJpaRepository = externalJwtCredentialJpaRepository;

@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
 import java.util.List;
 
 @Service
@@ -23,19 +22,19 @@ public class ConfirmationEmailServiceImpl implements ConfirmationEmailService
 {
 	private static final Logger logger = LoggerFactory.getLogger(ConfirmationEmailServiceImpl.class);
 
-	@Inject
-	private EmailRepository emailRepository;
+	private final EmailRepository emailRepository;
+	private final ConfirmationEmailRepository confirmationEmailRepository;
+	private final ActivationService activationService;
+	private final UserService userService;
 
-	@Inject
-	private ConfirmationEmailRepository confirmationEmailRepository;
+    public ConfirmationEmailServiceImpl(EmailRepository emailRepository, ConfirmationEmailRepository confirmationEmailRepository, ActivationService activationService, UserService userService) {
+        this.emailRepository = emailRepository;
+        this.confirmationEmailRepository = confirmationEmailRepository;
+        this.activationService = activationService;
+        this.userService = userService;
+    }
 
-	@Inject
-	private ActivationService activationService;
-
-	@Inject
-	private UserService userService;
-
-	public void confirmEmail(User user, String confirmationCode)
+    public void confirmEmail(User user, String confirmationCode)
 	{
 		Email email = findEmail(user, confirmationCode);
 

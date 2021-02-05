@@ -8,16 +8,17 @@ import net.nlacombe.userws.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-
 @Service
 @Transactional
 public class ActivationServiceImpl implements ActivationService
 {
-	@Inject
-	private UserService userService;
+	private final UserService userService;
 
-	public void activateUser(User user) throws UsernameTakenRestException
+    public ActivationServiceImpl(UserService userService) {
+        this.userService = userService;
+    }
+
+    public void activateUser(User user) throws UsernameTakenRestException
 	{
 		if (user.getStatus() != UserStatus.PENDING_ACTIVATION)
 			return;

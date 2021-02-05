@@ -12,7 +12,6 @@ import net.nlacombe.userws.service.security.PasswordService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
 import java.util.Arrays;
 
 @Service
@@ -21,13 +20,15 @@ public class PasswordServiceImpl implements PasswordService
 {
 	private CryptoService cryptoService = CryptoService.getInstance();
 
-	@Inject
-	private StoredPasswordRepository storedPasswordRepository;
+	private final StoredPasswordRepository storedPasswordRepository;
+	private final ConfirmationEmailService confirmationEmailService;
 
-	@Inject
-	private ConfirmationEmailService confirmationEmailService;
+    public PasswordServiceImpl(StoredPasswordRepository storedPasswordRepository, ConfirmationEmailService confirmationEmailService) {
+        this.storedPasswordRepository = storedPasswordRepository;
+        this.confirmationEmailService = confirmationEmailService;
+    }
 
-	@Override
+    @Override
 	public User authenticate(PasswordCredential providedCredential)
 	{
 		StoredPasswordCredential storedCredential = storedPasswordRepository.findByUsername(providedCredential.getUsername());

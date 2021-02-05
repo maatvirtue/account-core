@@ -4,15 +4,16 @@ import net.nlacombe.userws.domain.ConfirmationEmail;
 import net.nlacombe.userws.entity.ConfirmationEmailEntity;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
-
 @Component
 public class ConfirmationEmailEntityMapper extends AbstractEntityMapper<ConfirmationEmail, ConfirmationEmailEntity>
 {
-	@Inject
-	private EmailEntityMapper emailEntityMapper;
+	private final EmailEntityMapper emailEntityMapper;
 
-	@Override
+    public ConfirmationEmailEntityMapper(EmailEntityMapper emailEntityMapper) {
+        this.emailEntityMapper = emailEntityMapper;
+    }
+
+    @Override
 	public ConfirmationEmail mapToDomainType(ConfirmationEmailEntity confirmationEmailEntity, MapperCache cache)
 	{
 		if(cache.contains(confirmationEmailEntity))

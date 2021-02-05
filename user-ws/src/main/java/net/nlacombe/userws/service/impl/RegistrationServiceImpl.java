@@ -13,25 +13,23 @@ import org.hibernate.validator.constraints.Email;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-
 @Service
 @Transactional
 public class RegistrationServiceImpl implements RegistrationService
 {
-	@Inject
-	private UserService userService;
+	private final UserService userService;
+	private final PasswordService passwordService;
+	private final EmailSenderService emailSenderService;
+	private final ConfirmationEmailService confirmationEmailService;
 
-	@Inject
-	private PasswordService passwordService;
+    public RegistrationServiceImpl(UserService userService, PasswordService passwordService, EmailSenderService emailSenderService, ConfirmationEmailService confirmationEmailService) {
+        this.userService = userService;
+        this.passwordService = passwordService;
+        this.emailSenderService = emailSenderService;
+        this.confirmationEmailService = confirmationEmailService;
+    }
 
-	@Inject
-	private EmailSenderService emailSenderService;
-
-	@Inject
-	private ConfirmationEmailService confirmationEmailService;
-
-	public User registerWithPassword(@Email String email) throws MailServiceException, UsernameTakenRestException
+    public User registerWithPassword(@Email String email) throws MailServiceException, UsernameTakenRestException
 	{
 		if(userService.usernameTaken(email))
 			throw new UsernameTakenRestException("Username already used by another user: \""+email+"\"");

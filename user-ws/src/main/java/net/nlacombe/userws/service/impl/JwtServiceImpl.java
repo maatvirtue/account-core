@@ -6,49 +6,50 @@ import net.nlacombe.crypto.service.CryptoService;
 import net.nlacombe.userws.domain.User;
 import net.nlacombe.userws.service.JwtService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import java.io.InputStream;
-import java.security.KeyPair;
+import java.io.IOException;
 import java.security.PrivateKey;
 
 @Service
-public class JwtServiceImpl implements JwtService
-{
-	private CryptoService cryptoService;
-	private String nlacombeNetV2PrivateKeyPassword;
-	private PrivateKey nlacombeNetPrivateKey;
-	private JwtUtil jwtUtil;
+public class JwtServiceImpl implements JwtService {
 
-	@Inject
-	public JwtServiceImpl(@Value("${security.privateKey.nlacombeNetV2.password}") String nlacombeNetV2PrivateKeyPassword,
-						  JwtUtil jwtUtil)
-	{
-		this.nlacombeNetV2PrivateKeyPassword = nlacombeNetV2PrivateKeyPassword;
-		this.jwtUtil = jwtUtil;
+    private final CryptoService cryptoService;
+    private final JwtUtil jwtUtil;
+    private final PrivateKey nlacombeNetPrivateKey;
 
-		cryptoService = CryptoService.getInstance();
-	}
+    public JwtServiceImpl(
+        @Value("${jwt.signing-private-key.location}") String jwtSigningPrivateKeyLocation,
+        @Value("${security.privateKey.nlacombeNetV2.password}") String nlacombeNetV2PrivateKeyPassword,
+        ResourceLoader resourceLoader,
+        JwtUtil jwtUtil) {
 
-	@Override
-	public String createJwtToken(User user)
-	{
-		JwtUser jwtUser = new JwtUser();
-		jwtUser.setUserId(user.getUserId());
-		jwtUser.setSubject(Integer.toString(user.getUserId()));
+        this.jwtUtil = jwtUtil;
 
-		return jwtUtil.createJwsToken(getNlacombeNetPrivateKey(), jwtUser);
-	}
+        cryptoService = CryptoService.getInstance();
+        nlacombeNetPrivateKey = getNlacombeNetPrivateKey(resourceLoader, jwtSigningPrivateKeyLocation, nlacombeNetV2PrivateKeyPassword);
+    }
 
-	private PrivateKey getNlacombeNetPrivateKey()
-	{
-		if (nlacombeNetPrivateKey == null) {
-			InputStream keypairInputStream = getClass().getResourceAsStream("/nlacombe-net_v2.pem");
-			KeyPair keyPair = cryptoService.readEncryptedKeyPairFromPem(keypairInputStream, nlacombeNetV2PrivateKeyPassword);
-			this.nlacombeNetPrivateKey = keyPair.getPrivate();
-		}
+    @Override
+    public String createJwtToken(User user) {
+        JwtUser jwtUser = new JwtUser();
+        jwtUser.setUserId(user.getUserId());
+        jwtUser.setSubject(Integer.toString(user.getUserId()));
 
-		return nlacombeNetPrivateKey;
-	}
+        return jwtUtil.createJwsToken(nlacombeNetPrivateKey, jwtUser);
+    }
+
+    private PrivateKey getNlacombeNetPrivateKey(ResourceLoader resourceLoader, String jwtSigningPrivateKeyLocation, String nlacombeNetV2PrivateKeyPassword) {
+        try {
+            var keypairInputStream = resourceLoader.getResource(jwtSigningPrivateKeyLocation).getInputStream();
+            var keyPair = cryptoService.readEncryptedKeyPairFromPem(keypairInputStream, nlacombeNetV2PrivateKeyPassword);
+
+            return keyPair.getPrivate();
+        } catch (IOException e) {
+            var message = "Error while getting jwt signing private key. jwtSigningPrivateKeyLocation: $jwtSigningPrivateKeyLocation"
+                .replace("$jwtSigningPrivateKeyLocation", jwtSigningPrivateKeyLocation);
+            throw new RuntimeException(message);
+        }
+    }
 }

@@ -6,18 +6,18 @@ import net.nlacombe.userws.jparepository.EmailJpaRepository;
 import net.nlacombe.userws.mapper.EmailEntityMapper;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
-
 @Component
 public class EmailRepository
 {
-	@Inject
-	private EmailJpaRepository emailJpaRepository;
+	private final EmailJpaRepository emailJpaRepository;
+	private final EmailEntityMapper emailEntityMapper;
 
-	@Inject
-	private EmailEntityMapper emailEntityMapper;
+    public EmailRepository(EmailJpaRepository emailJpaRepository, EmailEntityMapper emailEntityMapper) {
+        this.emailJpaRepository = emailJpaRepository;
+        this.emailEntityMapper = emailEntityMapper;
+    }
 
-	public Email saveEmail(Email email)
+    public Email saveEmail(Email email)
 	{
 		EmailEntity emailEntity = emailEntityMapper.mapToEntityType(email);
 		emailEntity = emailJpaRepository.save(emailEntity);

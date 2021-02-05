@@ -1,13 +1,32 @@
-apply plugin: 'java-library'
-
-java {
-	sourceCompatibility = project.javaVersion
-	targetCompatibility = project.javaVersion
+plugins {
+    id 'java-library'
+    id 'maven-publish'
 }
 
 dependencies {
-	api 'javax.ws.rs:javax.ws.rs-api:2.0.1'
-	api 'net.nlacombe:ws-utils:5.0.0'
+	api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
+    api "net.nlacombe:ws-utils:${depVersions.wsUtils}"
 
-	api 'org.hibernate:hibernate-validator:5.2.4.Final'
+	api 'org.hibernate.validator:hibernate-validator:6.2.0.Final'
+}
+
+task javadocJar(type: Javadoc) {
+    source = sourceSets.main.allJava
+    options.quiet()
+}
+
+java {
+    sourceCompatibility = project.javaVersion
+    targetCompatibility = project.javaVersion
+
+    withJavadocJar()
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        userApi(org.gradle.api.publish.maven.MavenPublication) {
+            from components.java
+        }
+    }
 }

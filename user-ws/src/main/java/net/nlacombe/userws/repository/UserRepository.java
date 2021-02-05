@@ -9,21 +9,20 @@ import net.nlacombe.userws.mapper.UserEntityMapper;
 import net.nlacombe.userws.mapper.UserStatusEntityMapper;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
-
 @Component
 public class UserRepository
 {
-	@Inject
-	private UserJpaRepository userJpaRepository;
+	private final UserJpaRepository userJpaRepository;
+	private final UserEntityMapper userEntityMapper;
+	private final UserStatusEntityMapper userStatusEntityMapper;
 
-	@Inject
-	private UserEntityMapper userEntityMapper;
+    public UserRepository(UserJpaRepository userJpaRepository, UserEntityMapper userEntityMapper, UserStatusEntityMapper userStatusEntityMapper) {
+        this.userJpaRepository = userJpaRepository;
+        this.userEntityMapper = userEntityMapper;
+        this.userStatusEntityMapper = userStatusEntityMapper;
+    }
 
-	@Inject
-	private UserStatusEntityMapper userStatusEntityMapper;
-
-	public User getUserById(int userId)
+    public User getUserById(int userId)
 	{
 		UserEntity userTable = userJpaRepository.getOne(userId);
 		User user = userEntityMapper.mapToDomainType(userTable);

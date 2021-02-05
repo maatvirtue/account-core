@@ -9,20 +9,20 @@ import net.nlacombe.userws.mapper.ConfirmationEmailEntityMapper;
 import net.nlacombe.userws.mapper.EmailEntityMapper;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
 import java.util.List;
 
 @Component
 public class ConfirmationEmailRepository
 {
-	@Inject
-	private ConfirmationEmailJpaRepository confirmationEmailJpaRepository;
+    private final ConfirmationEmailJpaRepository confirmationEmailJpaRepository;
+    private final ConfirmationEmailEntityMapper confirmationEmailEntityMapper;
+    private final EmailEntityMapper emailEntityMapper;
 
-	@Inject
-	private ConfirmationEmailEntityMapper confirmationEmailEntityMapper;
-
-	@Inject
-	private EmailEntityMapper emailEntityMapper;
+    public ConfirmationEmailRepository(ConfirmationEmailJpaRepository confirmationEmailJpaRepository, ConfirmationEmailEntityMapper confirmationEmailEntityMapper, EmailEntityMapper emailEntityMapper) {
+        this.confirmationEmailJpaRepository = confirmationEmailJpaRepository;
+        this.confirmationEmailEntityMapper = confirmationEmailEntityMapper;
+        this.emailEntityMapper = emailEntityMapper;
+    }
 
 	public List<ConfirmationEmail> findByConfirmationCode(String confirmationCode)
 	{

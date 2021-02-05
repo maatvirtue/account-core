@@ -4,15 +4,16 @@ import net.nlacombe.userws.domain.security.StoredPasswordCredential;
 import net.nlacombe.userws.entity.PasswordCredentialEntity;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
-
 @Component
 public class StoredPasswordCredentialEntityMapper extends AbstractEntityMapper<StoredPasswordCredential, PasswordCredentialEntity>
 {
-	@Inject
-	private UserEntityMapper userEntityMapper;
+	private final UserEntityMapper userEntityMapper;
 
-	@Override
+    public StoredPasswordCredentialEntityMapper(UserEntityMapper userEntityMapper) {
+        this.userEntityMapper = userEntityMapper;
+    }
+
+    @Override
 	public StoredPasswordCredential mapToDomainType(PasswordCredentialEntity passwordCredentialEntity, MapperCache cache)
 	{
 		if(cache.contains(passwordCredentialEntity))

@@ -5,15 +5,16 @@ import net.nlacombe.userws.entity.PermissionEntity;
 import net.nlacombe.userws.jparepository.PermissionJpaRepository;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
-
 @Component
 public class PermissionEntityMapper extends AbstractEntityMapper<Permission, PermissionEntity>
 {
-	@Inject
-	private PermissionJpaRepository permissionJpaRepository;
+	private final PermissionJpaRepository permissionJpaRepository;
 
-	@Override
+    public PermissionEntityMapper(PermissionJpaRepository permissionJpaRepository) {
+        this.permissionJpaRepository = permissionJpaRepository;
+    }
+
+    @Override
 	public Permission mapToDomainType(PermissionEntity permissionEntity, MapperCache cache)
 	{
 		return Permission.getByName(permissionEntity.getName());

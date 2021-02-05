@@ -16,10 +16,14 @@ spec:
     spec:
       containers:
         - name: user-ws
-          image: gcr.io/nlacombe-net-prod/user-ws:4.1.1-20201213192128
+          image: gcr.io/nlacombe-net-prod/user-ws:5.0.0-20210205132231
           env:
             - name: PORT
               value: "80"
+          volumeMounts:
+            - name: user-ws-config
+              mountPath: /app/config
+              readOnly: true
           ports:
             - containerPort: 80
           resources:
@@ -29,6 +33,10 @@ spec:
             limits:
               cpu: 600m
               memory: 284Mi
+      volumes:
+        - name: user-ws-config
+          secret:
+            secretName: user-ws-config
 ---
 apiVersion: v1
 kind: Service

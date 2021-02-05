@@ -6,18 +6,18 @@ import net.nlacombe.userws.jparepository.PasswordCredentialJpaRepository;
 import net.nlacombe.userws.mapper.StoredPasswordCredentialEntityMapper;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
-
 @Component
 public class StoredPasswordRepository
 {
-	@Inject
-	private PasswordCredentialJpaRepository passwordCredentialJpaRepository;
+	private final PasswordCredentialJpaRepository passwordCredentialJpaRepository;
+	private final StoredPasswordCredentialEntityMapper storedPasswordCredentialEntityMapper;
 
-	@Inject
-	private StoredPasswordCredentialEntityMapper storedPasswordCredentialEntityMapper;
+    public StoredPasswordRepository(PasswordCredentialJpaRepository passwordCredentialJpaRepository, StoredPasswordCredentialEntityMapper storedPasswordCredentialEntityMapper) {
+        this.passwordCredentialJpaRepository = passwordCredentialJpaRepository;
+        this.storedPasswordCredentialEntityMapper = storedPasswordCredentialEntityMapper;
+    }
 
-	public StoredPasswordCredential findByUsername(String username)
+    public StoredPasswordCredential findByUsername(String username)
 	{
 		PasswordCredentialEntity passwordCredentialEntity = passwordCredentialJpaRepository.findByUsername(username);
 

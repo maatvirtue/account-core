@@ -4,11 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.nlacombe.authlib.jwt.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
-@PropertySource("classpath:/secret.properties")
 public class BaseConfig
 {
 	@Bean

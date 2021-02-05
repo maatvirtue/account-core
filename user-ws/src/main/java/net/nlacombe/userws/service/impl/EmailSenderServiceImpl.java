@@ -13,7 +13,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -79,16 +78,17 @@ public class EmailSenderServiceImpl implements EmailSenderService
 		}
 	}
 
-	@Inject
-	private JavaMailSender mailSender;
+	private final JavaMailSender mailSender;
+	private final String senderEmail;
+	private final String senderName;
 
-	@Value("${email.sender.email}")
-	private String senderEmail;
+    public EmailSenderServiceImpl(JavaMailSender mailSender, @Value("${email.sender.email}") String senderEmail, @Value("${email.sender.name}") String senderName) {
+        this.mailSender = mailSender;
+        this.senderEmail = senderEmail;
+        this.senderName = senderName;
+    }
 
-	@Value("${email.sender.name}")
-	private String senderName;
-
-	public void sendRegistrationEmail(@Email String email, @Username String username, @Password String password) throws MailServiceException
+    public void sendRegistrationEmail(@Email String email, @Username String username, @Password String password) throws MailServiceException
 	{
 		String subject = "Account Registration";
 

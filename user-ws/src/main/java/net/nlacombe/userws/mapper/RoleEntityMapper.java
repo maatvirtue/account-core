@@ -5,15 +5,16 @@ import net.nlacombe.userws.entity.RoleEntity;
 import net.nlacombe.userws.jparepository.RoleJpaRepository;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
-
 @Component
 public class RoleEntityMapper extends AbstractEntityMapper<Role, RoleEntity>
 {
-	@Inject
-	private RoleJpaRepository roleJpaRepository;
+	private final RoleJpaRepository roleJpaRepository;
 
-	@Override
+    public RoleEntityMapper(RoleJpaRepository roleJpaRepository) {
+        this.roleJpaRepository = roleJpaRepository;
+    }
+
+    @Override
 	public Role mapToDomainType(RoleEntity roleEntity, MapperCache cache)
 	{
 		return Role.getByName(roleEntity.getName());
