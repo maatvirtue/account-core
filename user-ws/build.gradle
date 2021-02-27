@@ -38,7 +38,7 @@ dependencies {
 	implementation 'net.nlacombe:common-lib:11.1.0'
 	implementation 'net.nlacombe:crypto-lib:7.0.1'
     implementation "net.nlacombe:ws-utils:${depVersions.wsUtils}"
-	implementation 'net.nlacombe:auth-lib:11.0.0'
+	implementation 'net.nlacombe:auth-lib:12.0.0'
 
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 	implementation 'org.springframework.cloud:spring-cloud-gcp-starter-sql-mysql'

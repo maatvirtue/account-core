@@ -14,12 +14,18 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.security.KeyPair;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
 
 @Service
 public class JwtServiceImpl implements JwtService {
+
+    private static final URL JWK_SET_URL = toUrl("https://user-api.nlacombe.net/v1/jwks");
 
     private final CryptoService cryptoService;
     private final JwtUtil jwtUtil;
@@ -43,7 +49,7 @@ public class JwtServiceImpl implements JwtService {
         jwtUser.setUserId(user.getUserId());
         jwtUser.setSubject(Integer.toString(user.getUserId()));
 
-        return jwtUtil.createJwsToken(nlacombeNetKeyPair.getPrivate(), jwtUser);
+        return jwtUtil.createJwsToken(nlacombeNetKeyPair, JWK_SET_URL, jwtUser);
     }
 
     @Override
@@ -92,6 +98,14 @@ public class JwtServiceImpl implements JwtService {
             var message = "Error while getting jwt signing private key. jwtSigningPrivateKeyLocation: $jwtSigningPrivateKeyLocation"
                 .replace("$jwtSigningPrivateKeyLocation", jwtSigningPrivateKeyLocation);
             throw new RuntimeException(message);
+        }
+    }
+
+    private static URL toUrl(String urlText) {
+        try {
+            return new URI(urlText).toURL();
+        } catch (MalformedURLException | URISyntaxException e) {
+            throw new RuntimeException(e);
         }
     }
 }
