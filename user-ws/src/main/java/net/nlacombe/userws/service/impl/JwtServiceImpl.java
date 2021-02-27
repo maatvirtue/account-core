@@ -33,14 +33,14 @@ public class JwtServiceImpl implements JwtService {
 
     public JwtServiceImpl(
         @Value("${jwt.signing-private-key.location}") String jwtSigningPrivateKeyLocation,
-        @Value("${security.privateKey.nlacombeNetV2.password}") String nlacombeNetV2PrivateKeyPassword,
+        @Value("${jwt.signing-private-key.password}") String jwtSigningPrivateKeyPassword,
         ResourceLoader resourceLoader,
         JwtUtil jwtUtil) {
 
         this.jwtUtil = jwtUtil;
 
         cryptoService = CryptoService.getInstance();
-        nlacombeNetKeyPair = getNlacombeNetKeyPair(resourceLoader, jwtSigningPrivateKeyLocation, nlacombeNetV2PrivateKeyPassword);
+        nlacombeNetKeyPair = getNlacombeNetKeyPair(resourceLoader, jwtSigningPrivateKeyLocation, jwtSigningPrivateKeyPassword);
     }
 
     @Override
@@ -89,11 +89,11 @@ public class JwtServiceImpl implements JwtService {
         }
     }
 
-    private KeyPair getNlacombeNetKeyPair(ResourceLoader resourceLoader, String jwtSigningPrivateKeyLocation, String nlacombeNetV2PrivateKeyPassword) {
+    private KeyPair getNlacombeNetKeyPair(ResourceLoader resourceLoader, String jwtSigningPrivateKeyLocation, String jwtSigningPrivateKeyPassword) {
         try {
             var keypairInputStream = resourceLoader.getResource(jwtSigningPrivateKeyLocation).getInputStream();
 
-            return cryptoService.readEncryptedKeyPairFromPem(keypairInputStream, nlacombeNetV2PrivateKeyPassword);
+            return cryptoService.readEncryptedKeyPairFromPem(keypairInputStream, jwtSigningPrivateKeyPassword);
         } catch (IOException e) {
             var message = "Error while getting jwt signing private key. jwtSigningPrivateKeyLocation: $jwtSigningPrivateKeyLocation"
                 .replace("$jwtSigningPrivateKeyLocation", jwtSigningPrivateKeyLocation);

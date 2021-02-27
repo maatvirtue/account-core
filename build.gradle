@@ -1,6 +1,6 @@
 subprojects {
 	group = 'net.nlacombe'
-	version = '6.0.0'
+	version = '6.0.1'
 
     ext.depVersions = [
         wsUtils: '6.0.0'
