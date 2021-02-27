@@ -1,8 +1,12 @@
 package net.nlacombe.userws.service.impl;
 
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.KeyUse;
+import com.nimbusds.jose.jwk.RSAKey;
 import net.nlacombe.authlib.jwt.JwtUser;
 import net.nlacombe.authlib.jwt.JwtUtil;
-import net.nlacombe.crypto.service.CryptoService;
+import net.nlacombe.crypto.api.CryptoService;
 import net.nlacombe.userws.domain.User;
 import net.nlacombe.userws.service.JwtService;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,14 +14,16 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.security.PrivateKey;
+import java.security.KeyPair;
+import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
 
 @Service
 public class JwtServiceImpl implements JwtService {
 
     private final CryptoService cryptoService;
     private final JwtUtil jwtUtil;
-    private final PrivateKey nlacombeNetPrivateKey;
+    private final KeyPair nlacombeNetKeyPair;
 
     public JwtServiceImpl(
         @Value("${jwt.signing-private-key.location}") String jwtSigningPrivateKeyLocation,
@@ -28,24 +34,60 @@ public class JwtServiceImpl implements JwtService {
         this.jwtUtil = jwtUtil;
 
         cryptoService = CryptoService.getInstance();
-        nlacombeNetPrivateKey = getNlacombeNetPrivateKey(resourceLoader, jwtSigningPrivateKeyLocation, nlacombeNetV2PrivateKeyPassword);
+        nlacombeNetKeyPair = getNlacombeNetKeyPair(resourceLoader, jwtSigningPrivateKeyLocation, nlacombeNetV2PrivateKeyPassword);
     }
 
     @Override
     public String createJwtToken(User user) {
-        JwtUser jwtUser = new JwtUser();
+        var jwtUser = new JwtUser();
         jwtUser.setUserId(user.getUserId());
         jwtUser.setSubject(Integer.toString(user.getUserId()));
 
-        return jwtUtil.createJwsToken(nlacombeNetPrivateKey, jwtUser);
+        return jwtUtil.createJwsToken(nlacombeNetKeyPair.getPrivate(), jwtUser);
     }
 
-    private PrivateKey getNlacombeNetPrivateKey(ResourceLoader resourceLoader, String jwtSigningPrivateKeyLocation, String nlacombeNetV2PrivateKeyPassword) {
+    @Override
+    public String getJwkSetJson() {
+        var jwtSigningPublicKey = nlacombeNetKeyPair.getPublic();
+        var rsaPublicKey = getRsaPublicKey(jwtSigningPublicKey);
+
+        var jwkBuilder = new RSAKey.Builder(rsaPublicKey)
+            .keyUse(KeyUse.SIGNATURE)
+            .algorithm(toJwsAlgorithm(jwtUtil.getJwaSigningAlgorithmUsedFor(nlacombeNetKeyPair.getPrivate())))
+            .keyID(cryptoService.getPublicKeyFingerPrintHexString(jwtSigningPublicKey));
+
+        var key = jwkBuilder.build();
+        var jwkSet = new JWKSet(key);
+
+        return jwkSet.toString(true);
+    }
+
+    private JWSAlgorithm toJwsAlgorithm(String jwaAlgorithmName) {
+        switch (jwaAlgorithmName) {
+            case "RS256":
+                return JWSAlgorithm.RS256;
+            case "RS384":
+                return JWSAlgorithm.RS384;
+            case "RS512":
+                return JWSAlgorithm.RS512;
+            default:
+                throw new RuntimeException("Unknown jwa algorithm: " + jwaAlgorithmName);
+        }
+    }
+
+    private RSAPublicKey getRsaPublicKey(PublicKey jwtSigningPublicKey) {
+        try {
+            return (RSAPublicKey) jwtSigningPublicKey;
+        } catch (ClassCastException e) {
+            throw new RuntimeException("Error: jwt public signing key format conversion to jwk not implemented/supported", e);
+        }
+    }
+
+    private KeyPair getNlacombeNetKeyPair(ResourceLoader resourceLoader, String jwtSigningPrivateKeyLocation, String nlacombeNetV2PrivateKeyPassword) {
         try {
             var keypairInputStream = resourceLoader.getResource(jwtSigningPrivateKeyLocation).getInputStream();
-            var keyPair = cryptoService.readEncryptedKeyPairFromPem(keypairInputStream, nlacombeNetV2PrivateKeyPassword);
 
-            return keyPair.getPrivate();
+            return cryptoService.readEncryptedKeyPairFromPem(keypairInputStream, nlacombeNetV2PrivateKeyPassword);
         } catch (IOException e) {
             var message = "Error while getting jwt signing private key. jwtSigningPrivateKeyLocation: $jwtSigningPrivateKeyLocation"
                 .replace("$jwtSigningPrivateKeyLocation", jwtSigningPrivateKeyLocation);

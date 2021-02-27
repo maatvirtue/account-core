@@ -3,8 +3,10 @@ package net.nlacombe.userws.webservice.impl;
 import net.nlacombe.authlib.jwt.JwtData;
 import net.nlacombe.authlib.jwt.JwtGoogleUser;
 import net.nlacombe.authlib.jwt.JwtUtil;
+import net.nlacombe.authlib.jwt.SigningKeyNotFoundException;
 import net.nlacombe.userws.api.dto.JwsToken;
 import net.nlacombe.userws.api.dto.PasswordCredential;
+import net.nlacombe.userws.api.exception.InvalidJwtRestException;
 import net.nlacombe.userws.api.webservice.AuthenticationWebService;
 import net.nlacombe.userws.domain.User;
 import net.nlacombe.userws.service.ExternalJwtCredentialService;
@@ -46,8 +48,8 @@ public class AuthenticationWebServiceImpl implements AuthenticationWebService
 	@Override
 	public JwsToken authenticateWithExternalJwt(JwsToken externalJwsToken)
 	{
-		JwtData jwtData = jwtUtil.parseAndValidate(externalJwsToken.getToken());
-		User user;
+        var jwtData = parseAndValidateJwt(externalJwsToken);
+        User user;
 
 		if (jwtData instanceof JwtGoogleUser)
 			user = authenticateWithGoogleJwt((JwtGoogleUser) jwtData);
@@ -57,7 +59,15 @@ public class AuthenticationWebServiceImpl implements AuthenticationWebService
 		return getJwsToken(user);
 	}
 
-	private User authenticateWithGoogleJwt(JwtGoogleUser jwtGoogleUser)
+    private JwtData parseAndValidateJwt(JwsToken externalJwsToken) {
+        try {
+            return jwtUtil.parseAndValidate(externalJwsToken.getToken());
+        } catch (SigningKeyNotFoundException e) {
+            throw new InvalidJwtRestException("Jwt signing key not found or not trusted.");
+        }
+    }
+
+    private User authenticateWithGoogleJwt(JwtGoogleUser jwtGoogleUser)
 	{
 		User existingUser = externalJwtCredentialService.getUser(jwtGoogleUser.getIssuer(), jwtGoogleUser.getSubject());
 

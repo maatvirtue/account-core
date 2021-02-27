@@ -5,4 +5,6 @@ import net.nlacombe.userws.domain.User;
 public interface JwtService
 {
 	String createJwtToken(User user);
+
+    String getJwkSetJson();
 }

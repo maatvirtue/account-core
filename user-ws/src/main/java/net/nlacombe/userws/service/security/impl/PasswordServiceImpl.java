@@ -1,7 +1,7 @@
 package net.nlacombe.userws.service.security.impl;
 
 import net.nlacombe.commonlib.util.GenericUtil;
-import net.nlacombe.crypto.service.CryptoService;
+import net.nlacombe.crypto.api.CryptoService;
 import net.nlacombe.userws.api.dto.PasswordCredential;
 import net.nlacombe.userws.constants.Constants;
 import net.nlacombe.userws.domain.User;

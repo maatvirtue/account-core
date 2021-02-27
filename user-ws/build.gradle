@@ -36,9 +36,9 @@ dependencies {
 	implementation project(':user-api')
 
 	implementation 'net.nlacombe:common-lib:11.1.0'
-	implementation 'net.nlacombe:crypto-lib:6.1.0'
+	implementation 'net.nlacombe:crypto-lib:7.0.1'
     implementation "net.nlacombe:ws-utils:${depVersions.wsUtils}"
-	implementation 'net.nlacombe:auth-lib:10.1.0'
+	implementation 'net.nlacombe:auth-lib:11.0.0'
 
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 	implementation 'org.springframework.cloud:spring-cloud-gcp-starter-sql-mysql'
@@ -52,10 +52,10 @@ dependencies {
     implementation 'javax.inject:javax.inject:1'
 	implementation 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.12.1'
 	implementation 'org.slf4j:slf4j-api:1.7.30'
+    implementation 'com.nimbusds:nimbus-jose-jwt:9.5'
 
 	runtimeOnly 'mysql:mysql-connector-java:8.0.23'
 	runtimeOnly 'ch.qos.logback:logback-classic:1.2.3'
-//	runtimeOnly 'javax.xml.bind:jaxb-api:2.3.0'
 	runtimeOnly 'org.javassist:javassist:3.27.0-GA'
 
 	testImplementation 'junit:junit:4.12'
