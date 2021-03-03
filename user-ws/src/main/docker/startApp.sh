@@ -1,6 +1,6 @@
 #!/bin/bash
 
-command="java -Xms100m -Xmx280m"
+command="java -Xms100m -Xmx500m"
 command+=" -Djava.security.egd=file:///dev/urandom"
 command+=" -Dspring.profiles.active=prod"
 command+=" -Dspring.config.location=file:///app/config/application.yaml"

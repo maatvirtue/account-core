@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: user-ws
-          image: gcr.io/nlacombe-net-prod/user-ws:6.0.1-20210227173624
+          image: gcr.io/nlacombe-net-prod/user-ws:6.0.1-20210303171508
           env:
             - name: PORT
               value: "80"
@@ -28,11 +28,11 @@ spec:
             - containerPort: 80
           resources:
             requests:
-              cpu: 10m
-              memory: 200Mi
+              cpu: 100m
+              memory: 300Mi
             limits:
               cpu: 600m
-              memory: 284Mi
+              memory: 564Mi
       volumes:
         - name: user-ws-config
           secret:
