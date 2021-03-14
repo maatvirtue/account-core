@@ -97,7 +97,7 @@ public class JwtServiceImpl implements JwtService {
         } catch (IOException e) {
             var message = "Error while getting jwt signing private key. jwtSigningPrivateKeyLocation: $jwtSigningPrivateKeyLocation"
                 .replace("$jwtSigningPrivateKeyLocation", jwtSigningPrivateKeyLocation);
-            throw new RuntimeException(message);
+            throw new RuntimeException(message, e);
         }
     }
 

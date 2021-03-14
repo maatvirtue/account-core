@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: user-ws
-          image: gcr.io/nlacombe-net-prod/user-ws:6.0.1-20210303171508
+          image: gcr.io/nlacombe-net-prod/user-ws:6.0.1-20210313185511
           env:
             - name: PORT
               value: "80"
